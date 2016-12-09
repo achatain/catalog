@@ -17,26 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.module;
+package com.github.achatain.catalog.service.impl;
 
 import com.github.achatain.catalog.dao.UserDao;
-import com.github.achatain.catalog.dao.impl.UserDaoImpl;
-import com.github.achatain.catalog.service.CategoryService;
-import com.github.achatain.catalog.service.CronService;
 import com.github.achatain.catalog.service.UserService;
-import com.github.achatain.catalog.service.impl.CategoryServiceImpl;
-import com.github.achatain.catalog.service.impl.CronServiceImpl;
-import com.github.achatain.catalog.service.impl.UserServiceImpl;
-import com.google.inject.AbstractModule;
+import com.github.achatain.javawebappauthentication.entity.AuthenticatedUser;
 
-class CatalogBusinessModule extends AbstractModule {
+import javax.inject.Inject;
+import java.util.Optional;
+
+public class UserServiceImpl implements UserService {
+
+    private final transient UserDao userDao;
+
+    @Inject
+    UserServiceImpl(final UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
-    protected void configure() {
-        bind(CategoryService.class).to(CategoryServiceImpl.class);
-        bind(CronService.class).to(CronServiceImpl.class);
-
-        bind(UserDao.class).to(UserDaoImpl.class);
-        bind(UserService.class).to(UserServiceImpl.class);
+    public void saveIfNotFound(final AuthenticatedUser user) {
+        final Optional<AuthenticatedUser> foundUser = userDao.findUser(user.getId());
     }
 }
