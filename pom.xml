@@ -22,6 +22,7 @@
         <mongodb-driver-version>3.4.0</mongodb-driver-version>
         <unit-test-threadcount>1</unit-test-threadcount>
         <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
+        <mongodb.url>mongodb://localhost</mongodb.url>
     </properties>
 
     <prerequisites>
@@ -119,6 +120,7 @@
             <id>openshift</id>
             <properties>
                 <loginUrlRedirect>https://catalog-achatain.rhcloud.com/google-sign-in/</loginUrlRedirect>
+                <mongodb.url>${env.OPENSHIFT_MONGODB_DB_URL}</mongodb.url>
             </properties>
             <build>
                 <plugins>

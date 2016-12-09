@@ -19,24 +19,27 @@
 
 package com.github.achatain.catalog.module;
 
-import com.github.achatain.catalog.dao.UserDao;
-import com.github.achatain.catalog.dao.impl.UserDaoImpl;
-import com.github.achatain.catalog.service.CategoryService;
-import com.github.achatain.catalog.service.CronService;
-import com.github.achatain.catalog.service.UserService;
-import com.github.achatain.catalog.service.impl.CategoryServiceImpl;
-import com.github.achatain.catalog.service.impl.CronServiceImpl;
-import com.github.achatain.catalog.service.impl.UserServiceImpl;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
-class CatalogBusinessModule extends AbstractModule {
+public class CatalogDatabaseModule extends AbstractModule {
+
+    public static final String SYSTEM_DATABASE = "system";
+
+    private final MongoClient mongoClient;
+    private final Provider<MongoDatabase> systemDatabaseProvider;
+
+    CatalogDatabaseModule(final MongoClient mongoClient) {
+        this.mongoClient = mongoClient;
+        this.systemDatabaseProvider = () -> mongoClient.getDatabase(SYSTEM_DATABASE);
+    }
 
     @Override
     protected void configure() {
-        bind(CategoryService.class).to(CategoryServiceImpl.class);
-        bind(CronService.class).to(CronServiceImpl.class);
-
-        bind(UserDao.class).to(UserDaoImpl.class);
-        bind(UserService.class).to(UserServiceImpl.class);
+        bind(MongoClient.class).toInstance(mongoClient);
+        bind(MongoDatabase.class).annotatedWith(Names.named(SYSTEM_DATABASE)).toProvider(systemDatabaseProvider);
     }
 }

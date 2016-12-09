@@ -19,38 +19,23 @@
 
 package com.github.achatain.catalog.module;
 
-import com.github.achatain.javawebappauthentication.filter.SessionFilter;
+import com.github.achatain.catalog.api.CategoryServlet;
+import com.github.achatain.catalog.api.CronServlet;
 import com.github.achatain.javawebappauthentication.servlet.GoogleSigninServlet;
 import com.github.achatain.javawebappauthentication.servlet.SignOutServlet;
 import com.google.inject.servlet.ServletModule;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
 class CatalogServletModule extends ServletModule {
 
-    private final Properties props;
-
-    CatalogServletModule() {
-        props = new Properties();
-        try (final InputStream is = CatalogServletModule.class.getClassLoader().getResourceAsStream("config.properties")) {
-            props.load(is);
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Unable to load config file from resources", e);
-        }
-    }
+    public static final String API_ROOT_URI = "/api";
+    public static final String V1_URI = "/v1";
+    public static final String WILDCHAR = "/*";
 
     @Override
     protected void configureServlets() {
-        Map<String, String> initParams = new HashMap<>();
-        initParams.put(SessionFilter.LOGIN_URL_REDIRECT, props.getProperty(SessionFilter.LOGIN_URL_REDIRECT));
-        filter("/needs-session/*").through(SessionFilter.class, initParams);
-
         serve("/google-auth").with(GoogleSigninServlet.class);
         serve("/signout").with(SignOutServlet.class);
+        serve("/cron").with(CronServlet.class);
+        serveRegex("\\/api\\/v1\\/\\w+\\/category(\\/.*)*").with(CategoryServlet.class);
     }
 }

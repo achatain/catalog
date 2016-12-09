@@ -23,15 +23,42 @@ import com.github.achatain.javawebappauthentication.module.AuthenticationModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 class CatalogConfig extends GuiceServletContextListener {
+
+    private final Properties properties;
+    private final MongoClient mongoClient;
+
+    CatalogConfig() {
+        properties = loadProperties();
+        mongoClient = new MongoClient(new MongoClientURI(properties.getProperty("mongodb.url")));
+    }
 
     @Override
     protected Injector getInjector() {
         return Guice.createInjector(
                 new AuthenticationModule(),
+                new CatalogDatabaseModule(mongoClient),
                 new CatalogBusinessModule(),
+                new CatalogFilterModule(properties),
                 new CatalogServletModule()
         );
+    }
+
+    private static Properties loadProperties() {
+        final Properties props = new Properties();
+        try (final InputStream is = CatalogServletModule.class.getClassLoader().getResourceAsStream("config.properties")) {
+            props.load(is);
+            return props;
+        }
+        catch (final IOException e) {
+            throw new RuntimeException("Unable to load config file from resources", e);
+        }
     }
 }
