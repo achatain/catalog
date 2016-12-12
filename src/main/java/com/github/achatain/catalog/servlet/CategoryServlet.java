@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.api;
+package com.github.achatain.catalog.servlet;
 
 import com.github.achatain.catalog.dao.UserDao;
-import com.github.achatain.catalog.service.CategoryService;
 import com.github.achatain.javawebappauthentication.service.SessionService;
 
 import javax.inject.Inject;
@@ -39,13 +38,11 @@ public class CategoryServlet extends HttpServlet {
     public static final String URI = "/category";
 
     private final transient SessionService sessionService;
-    private final transient CategoryService categoryService;
     private final transient UserDao userDao;
 
     @Inject
-    private CategoryServlet(final SessionService sessionService, final CategoryService categoryService, final UserDao userDao) {
+    private CategoryServlet(final SessionService sessionService, final UserDao userDao) {
         this.sessionService = sessionService;
-        this.categoryService = categoryService;
         this.userDao = userDao;
     }
 

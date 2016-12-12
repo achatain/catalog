@@ -19,14 +19,24 @@
 
 package com.github.achatain.catalog.service;
 
-import com.github.achatain.catalog.common.PaginatedResponse;
-import com.github.achatain.catalog.entity.Category;
+import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.entity.Item;
 
-public interface CategoryService {
+import java.util.List;
 
-    void save(Category category);
+public interface CollectionService {
 
-    PaginatedResponse<Category> getAll();
+    List<Collection> listCollections();
 
-    PaginatedResponse<Category> getAll(String pageToken);
+    void deleteCollection(String name);
+
+    List<Item> listItems(String collectionName);
+
+    void saveItem(Item item);
+
+    Item getItem(String id);
+
+    void editItem(String id, Item item);
+
+    void deleteItem(String id);
 }

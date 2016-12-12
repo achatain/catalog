@@ -19,23 +19,27 @@
 
 package com.github.achatain.catalog.module;
 
-import com.github.achatain.catalog.api.CategoryServlet;
-import com.github.achatain.catalog.api.CronServlet;
+import com.github.achatain.catalog.servlet.*;
 import com.github.achatain.javawebappauthentication.servlet.GoogleSigninServlet;
 import com.github.achatain.javawebappauthentication.servlet.SignOutServlet;
 import com.google.inject.servlet.ServletModule;
 
+import static java.lang.String.format;
+
 class CatalogServletModule extends ServletModule {
 
-    public static final String API_ROOT_URI = "/api";
-    public static final String V1_URI = "/v1";
-    public static final String WILDCHAR = "/*";
+    static final String API_ROOT_PATH = "/api";
+    static final String V1 = "/v1";
 
     @Override
     protected void configureServlets() {
         serve("/google-auth").with(GoogleSigninServlet.class);
         serve("/signout").with(SignOutServlet.class);
         serve("/cron").with(CronServlet.class);
-        serveRegex("\\/api\\/v1\\/\\w+\\/category(\\/.*)*").with(CategoryServlet.class);
+
+        serveRegex(format("\\%s\\%s\\/collections\\/\\w+\\/items\\/\\w+(\\/)?", API_ROOT_PATH, V1)).with(ItemIdServlet.class);
+        serveRegex(format("\\%s\\%s\\/collections\\/\\w+\\/items(\\/)?", API_ROOT_PATH, V1)).with(ItemServlet.class);
+        serveRegex(format("\\%s\\%s\\/collections\\/\\w+(\\/)?", API_ROOT_PATH, V1)).with(CollectionNameServlet.class);
+        serveRegex(format("\\%s\\%s\\/collections(\\/)?", API_ROOT_PATH, V1)).with(CollectionServlet.class);
     }
 }

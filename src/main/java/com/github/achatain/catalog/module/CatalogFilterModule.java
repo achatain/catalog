@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.github.achatain.catalog.module.CatalogServletModule.API_ROOT_URI;
-import static com.github.achatain.catalog.module.CatalogServletModule.V1_URI;
+import static com.github.achatain.catalog.module.CatalogServletModule.API_ROOT_PATH;
+import static com.github.achatain.catalog.module.CatalogServletModule.V1;
 
 public class CatalogFilterModule extends ServletModule {
 
@@ -44,7 +44,7 @@ public class CatalogFilterModule extends ServletModule {
         initParams.put(SessionFilter.LOGIN_URL_REDIRECT, properties.getProperty(SessionFilter.LOGIN_URL_REDIRECT));
 
         filter("/needs-session/*").through(SessionFilter.class, initParams);
-        filter(API_ROOT_URI + V1_URI + "/*").through(SessionFilter.class, initParams);
+        filter(API_ROOT_PATH + V1 + "/*").through(SessionFilter.class, initParams);
     }
 
     @Provides

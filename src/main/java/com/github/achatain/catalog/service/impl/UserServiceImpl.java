@@ -25,10 +25,14 @@ import com.github.achatain.javawebappauthentication.entity.AuthenticatedUser;
 
 import javax.inject.Inject;
 import java.util.Optional;
+import java.util.logging.Logger;
+
+import static java.lang.String.format;
 
 public class UserServiceImpl implements UserService {
 
-    private final transient UserDao userDao;
+    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
+    private final UserDao userDao;
 
     @Inject
     UserServiceImpl(final UserDao userDao) {
@@ -38,5 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveIfNotFound(final AuthenticatedUser user) {
         final Optional<AuthenticatedUser> foundUser = userDao.findUser(user.getId());
+        if (foundUser.isPresent()) {
+            LOGGER.info(format("The following user already exists [%s]", user));
+        } else {
+            LOGGER.info(format("Persisting the following user [%s]", user));
+            userDao.save(user);
+        }
     }
 }

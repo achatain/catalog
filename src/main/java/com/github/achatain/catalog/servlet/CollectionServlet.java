@@ -17,27 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.module;
+package com.github.achatain.catalog.servlet;
 
-import com.github.achatain.catalog.dao.UserDao;
-import com.github.achatain.catalog.dao.impl.UserDaoImpl;
 import com.github.achatain.catalog.service.CollectionService;
-import com.github.achatain.catalog.service.CronService;
-import com.github.achatain.catalog.service.UserService;
-import com.github.achatain.catalog.service.impl.CollectionServiceImpl;
-import com.github.achatain.catalog.service.impl.CronServiceImpl;
-import com.github.achatain.catalog.service.impl.UserServiceImpl;
-import com.google.inject.AbstractModule;
 
-class CatalogBusinessModule extends AbstractModule {
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Singleton
+public class CollectionServlet extends HttpServlet {
+
+    private final transient CollectionService collectionService;
+
+    @Inject
+    public CollectionServlet(final CollectionService collectionService) {
+        this.collectionService = collectionService;
+    }
 
     @Override
-    protected void configure() {
-        bind(CronService.class).to(CronServiceImpl.class);
-
-        bind(CollectionService.class).to(CollectionServiceImpl.class);
-
-        bind(UserDao.class).to(UserDaoImpl.class);
-        bind(UserService.class).to(UserServiceImpl.class);
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("List all collections " + req.getRequestURI());
     }
 }

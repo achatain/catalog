@@ -17,43 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.api;
+package com.github.achatain.catalog.servlet;
 
-import com.github.achatain.catalog.service.CronService;
-
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
-public class CronServlet extends HttpServlet {
-
-    private final transient CronService cronService;
-
-    @Inject
-    CronServlet(final CronService cronService) {
-        this.cronService = cronService;
-    }
+public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        Map<String, String> headers = new HashMap<>();
+        System.out.println("List all items in named collection " + req.getRequestURI());
+    }
 
-        String header;
-        final Enumeration<String> headerEnum = req.getHeaderNames();
-
-        while (headerEnum.hasMoreElements()) {
-            header = headerEnum.nextElement();
-            headers.put(header, req.getHeader(header));
-        }
-
-        cronService.acknowledgeCronRequest(headers);
+    @Override
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Store provided item in named collection " + req.getRequestURI());
     }
 }

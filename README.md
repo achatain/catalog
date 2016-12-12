@@ -5,11 +5,28 @@ https://github.com/achatain/catalog
 
 ##What is it?
 
-A tiny Java catalog webapp used to keep track of your Animal Crossing items.
+A catalog app to keep track and organise collections of items.
 
-##How do I build it?
+##API
 
-It couldn't be any simpler! Just run the following command:
-```bash
-$ mvn clean package
-```
+### /collections
+
+GET list all collections
+
+### /collections/{colname}
+
+DELETE delete the named collection and its entire content
+
+### /collections/{colname}/items
+
+GET list all items in the named collection
+
+POST store the provided item in the named collection
+
+### /collections/{colname}/items/{itemid}
+
+GET return an item by id from the named collection
+
+PUT edit an item by id from the named collection
+
+DELETE delete an item by id from the named collection

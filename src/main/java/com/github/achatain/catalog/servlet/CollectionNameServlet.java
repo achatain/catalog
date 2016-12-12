@@ -17,12 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.common;
+package com.github.achatain.catalog.servlet;
 
-import java.util.List;
+import javax.inject.Singleton;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-public class PaginatedResponse<T> {
+@Singleton
+public class CollectionNameServlet extends HttpServlet {
 
-    private List<T> list;
-    private String pageToken;
+    @Override
+    protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Delete collection named " + req.getRequestURI());
+    }
 }

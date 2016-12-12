@@ -17,18 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.service.impl;
+package com.github.achatain.catalog.entity;
 
-import com.github.achatain.catalog.entity.Category;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-public class CategoryServiceImplTest {
-
-    @Test
-    public void save() throws Exception {
-        new CategoryServiceImpl().save(new Category());
-    }
+public class Collection {
 
 }

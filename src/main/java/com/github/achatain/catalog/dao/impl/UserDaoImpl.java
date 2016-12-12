@@ -29,8 +29,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Optional;
 
-import static com.mongodb.client.model.Filters.eq;
 import static com.github.achatain.catalog.module.CatalogDatabaseModule.SYSTEM_DATABASE;
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserDaoImpl implements UserDao {
 
@@ -47,12 +47,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<AuthenticatedUser> findUser(final String id) {
-        final Optional<Document> foundUserDoc = Optional.of(mongoDatabase.getCollection(USER_COLLECTION).find(eq("id", id)).first());
+        final Optional<Document> foundUserDoc = Optional.ofNullable(mongoDatabase.getCollection(USER_COLLECTION).find(eq("id", id)).first());
         return foundUserDoc.map(doc -> gson.fromJson(doc.toJson(), AuthenticatedUser.class));
     }
 
     @Override
     public void save(final AuthenticatedUser user) {
-//        mongoDatabase;
+        mongoDatabase.getCollection(USER_COLLECTION).insertOne(Document.parse(gson.toJson(user)));
     }
 }
