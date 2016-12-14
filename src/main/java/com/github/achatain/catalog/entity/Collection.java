@@ -19,6 +19,11 @@
 
 package com.github.achatain.catalog.entity;
 
+import java.util.List;
+
 public class Collection {
 
+    private String id;
+    private String name;
+    private List<String> fields;
 }

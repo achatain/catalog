@@ -19,17 +19,26 @@
 
 package com.github.achatain.catalog.service.impl;
 
+import com.github.achatain.catalog.dao.CollectionDao;
 import com.github.achatain.catalog.entity.Collection;
 import com.github.achatain.catalog.entity.Item;
 import com.github.achatain.catalog.service.CollectionService;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class CollectionServiceImpl implements CollectionService {
 
+    private final CollectionDao collectionDao;
+
+    @Inject
+    CollectionServiceImpl(final CollectionDao collectionDao) {
+        this.collectionDao = collectionDao;
+    }
+
     @Override
-    public List<Collection> listCollections() {
-        throw new RuntimeException("Not implemented");
+    public List<Collection> listCollections(final String userId) {
+        return collectionDao.listCollections(userId);
     }
 
     @Override

@@ -17,26 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.service;
+package com.github.achatain.catalog.dao;
 
 import com.github.achatain.catalog.entity.Collection;
-import com.github.achatain.catalog.entity.Item;
 
 import java.util.List;
 
-public interface CollectionService {
+public interface CollectionDao {
 
     List<Collection> listCollections(final String userId);
-
-    void deleteCollection(String name);
-
-    List<Item> listItems(String collectionName);
-
-    void saveItem(Item item);
-
-    Item getItem(String id);
-
-    void editItem(String id, Item item);
-
-    void deleteItem(String id);
 }

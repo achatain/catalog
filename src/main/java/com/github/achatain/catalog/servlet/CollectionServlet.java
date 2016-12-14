@@ -20,8 +20,11 @@
 package com.github.achatain.catalog.servlet;
 
 import com.github.achatain.catalog.service.CollectionService;
+import com.github.achatain.javawebappauthentication.service.SessionService;
+import com.google.gson.Gson;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,15 +35,22 @@ import java.io.IOException;
 @Singleton
 public class CollectionServlet extends HttpServlet {
 
+    private final transient SessionService sessionService;
     private final transient CollectionService collectionService;
+    private final transient Gson gson;
 
     @Inject
-    public CollectionServlet(final CollectionService collectionService) {
+    public CollectionServlet(final SessionService sessionService, final CollectionService collectionService, @Named("pretty") final Gson gson) {
+        this.sessionService = sessionService;
         this.collectionService = collectionService;
+        this.gson = gson;
     }
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("List all collections " + req.getRequestURI());
+        final String jsonCollections = gson.toJson(collectionService.listCollections(sessionService.getUserFromSession(req.getSession()).getId()));
+        resp.getWriter().write(jsonCollections);
+        resp.getWriter().flush();
     }
 }

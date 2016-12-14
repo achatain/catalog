@@ -17,26 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.service;
+package com.github.achatain.catalog.dao;
 
-import com.github.achatain.catalog.entity.Collection;
-import com.github.achatain.catalog.entity.Item;
+import com.google.gson.Gson;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
-import java.util.List;
+public abstract class MongoDao {
 
-public interface CollectionService {
+    protected final MongoClient mongoClient;
+    protected final Gson gson;
 
-    List<Collection> listCollections(final String userId);
+    protected MongoDao(final MongoClient mongoClient, final Gson gson) {
+        this.mongoClient = mongoClient;
+        this.gson = gson;
+    }
 
-    void deleteCollection(String name);
-
-    List<Item> listItems(String collectionName);
-
-    void saveItem(Item item);
-
-    Item getItem(String id);
-
-    void editItem(String id, Item item);
-
-    void deleteItem(String id);
+    protected MongoDatabase getDatabase(final String userId) {
+        return mongoClient.getDatabase(userId);
+    }
 }
