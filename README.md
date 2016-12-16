@@ -11,22 +11,24 @@ A catalog app to keep track and organise collections of items.
 
 ### /collections
 
-GET list all collections
+**GET** *list all collections*
 
 ### /collections/{colname}
 
-DELETE delete the named collection and its entire content
+**POST** *create a collection with the given name*
+
+**DELETE** *delete the named collection and its entire content*
 
 ### /collections/{colname}/items
 
-GET list all items in the named collection
+**GET** *list all items in the named collection*
 
-POST store the provided item in the named collection
+**POST** *store the provided item in the named collection*
 
 ### /collections/{colname}/items/{itemid}
 
-GET return an item by id from the named collection
+**GET** *return an item by id from the named collection*
 
-PUT edit an item by id from the named collection
+**PUT** *edit an item by id from the named collection*
 
-DELETE delete an item by id from the named collection
+**DELETE** *delete an item by id from the named collection*

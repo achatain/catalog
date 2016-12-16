@@ -19,6 +19,32 @@
 
 package com.github.achatain.catalog.entity;
 
-public final class Category {
+public final class Field {
 
+    private String name;
+
+    private Field() {
+    }
+
+    public static Builder create() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String name;
+
+        private Builder() {
+        }
+
+        public Builder withName(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Field build() {
+            final Field field = new Field();
+            field.name = name;
+            return field;
+        }
+    }
 }

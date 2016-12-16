@@ -20,6 +20,7 @@
         <maven-surefire-version>2.19.1</maven-surefire-version>
         <achatain-java-webapp-authentication-version>1.0.1</achatain-java-webapp-authentication-version>
         <mongodb-driver-version>3.4.0</mongodb-driver-version>
+        <mockito-version>2.3.5</mockito-version>
         <unit-test-threadcount>1</unit-test-threadcount>
         <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
         <mongodb.url>mongodb://localhost</mongodb.url>
@@ -65,6 +66,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

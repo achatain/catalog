@@ -19,9 +19,6 @@
 
 package com.github.achatain.catalog.entity;
 
-import java.util.List;
-
-public class Item {
+public final class Item {
     private String name;
-    private List<Integer> ownedBy;
 }

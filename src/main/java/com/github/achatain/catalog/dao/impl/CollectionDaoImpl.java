@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 
 public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
-    private static final String COLLECTION_NAME = "collections_";
+    private static final String COLLECTIONS_COLLECTION_NAME = "collections_";
 
     @Inject
     CollectionDaoImpl(final MongoClient mongoClient, final Gson gson) {
@@ -43,7 +43,7 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     @Override
     public List<Collection> listCollections(final String userId) {
-        final FindIterable<Document> foundCollections = getDatabase(userId).getCollection(COLLECTION_NAME).find();
+        final FindIterable<Document> foundCollections = getDatabase(userId).getCollection(COLLECTIONS_COLLECTION_NAME).find();
         final List<Collection> collections = new ArrayList<>();
         final Consumer<Document> docToCol = doc -> collections.add(gson.fromJson(doc.toJson(), Collection.class));
         foundCollections.forEach(docToCol);

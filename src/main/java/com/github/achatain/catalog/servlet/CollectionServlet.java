@@ -19,6 +19,8 @@
 
 package com.github.achatain.catalog.servlet;
 
+import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.entity.Link;
 import com.github.achatain.catalog.service.CollectionService;
 import com.github.achatain.javawebappauthentication.service.SessionService;
 import com.google.gson.Gson;
@@ -27,30 +29,27 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Singleton
-public class CollectionServlet extends HttpServlet {
+public class CollectionServlet extends AuthenticatedJsonHttpServlet {
 
-    private final transient SessionService sessionService;
     private final transient CollectionService collectionService;
-    private final transient Gson gson;
 
     @Inject
     public CollectionServlet(final SessionService sessionService, final CollectionService collectionService, @Named("pretty") final Gson gson) {
-        this.sessionService = sessionService;
+        super(gson, sessionService);
         this.collectionService = collectionService;
-        this.gson = gson;
     }
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("List all collections " + req.getRequestURI());
-        final String jsonCollections = gson.toJson(collectionService.listCollections(sessionService.getUserFromSession(req.getSession()).getId()));
-        resp.getWriter().write(jsonCollections);
-        resp.getWriter().flush();
+        final List<Collection> collections = collectionService.listCollections(getUserId(req));
+        collections.forEach(col -> col.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref("./" + col.getId()).build()));
+        sendResponse(resp, collections);
     }
 }

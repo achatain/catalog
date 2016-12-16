@@ -17,8 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.entity;
+package com.github.achatain.catalog.servlet;
 
-public final class Category {
+import com.github.achatain.javawebappauthentication.service.SessionService;
+import com.google.gson.Gson;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
+
+    private final SessionService sessionService;
+
+    @Inject
+    AuthenticatedJsonHttpServlet(final Gson gson, final SessionService sessionService) {
+        super(gson);
+        this.sessionService = sessionService;
+    }
+
+    final String getUserId(final HttpServletRequest request) {
+        return sessionService.getUserFromSession(request.getSession()).getId();
+    }
 }

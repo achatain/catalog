@@ -23,17 +23,20 @@ import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
+import javax.inject.Inject;
+
 public abstract class MongoDao {
 
     protected final MongoClient mongoClient;
     protected final Gson gson;
 
+    @Inject
     protected MongoDao(final MongoClient mongoClient, final Gson gson) {
         this.mongoClient = mongoClient;
         this.gson = gson;
     }
 
-    protected MongoDatabase getDatabase(final String userId) {
+    protected final MongoDatabase getDatabase(final String userId) {
         return mongoClient.getDatabase(userId);
     }
 }

@@ -19,6 +19,19 @@
 
 package com.github.achatain.catalog.entity;
 
-public final class Category {
+import com.google.common.collect.Sets;
 
+import java.util.Set;
+
+public abstract class HateoasEntity {
+
+    private Set<Link> links;
+
+    HateoasEntity() {
+        this.links = Sets.newHashSet();
+    }
+
+    public void addLink(final Link link) {
+        links.add(link);
+    }
 }

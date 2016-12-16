@@ -21,9 +21,13 @@ package com.github.achatain.catalog.entity;
 
 import java.util.List;
 
-public class Collection {
+public final class Collection extends HateoasEntity {
 
     private String id;
     private String name;
-    private List<String> fields;
+    private List<Field> fields;
+
+    public String getId() {
+        return id;
+    }
 }
