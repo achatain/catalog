@@ -17,6 +17,8 @@ A catalog app to keep track and organise collections of items.
 
 **POST** *create a collection with the given name*
 
+**PUT** *edit the named collection*
+
 **DELETE** *delete the named collection and its entire content*
 
 ### /collections/{colname}/items

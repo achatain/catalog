@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Singleton
 public class CollectionServlet extends AuthenticatedJsonHttpServlet {
 
@@ -49,7 +51,12 @@ public class CollectionServlet extends AuthenticatedJsonHttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("List all collections " + req.getRequestURI());
         final List<Collection> collections = collectionService.listCollections(getUserId(req));
-        collections.forEach(col -> col.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref("./" + col.getId()).build()));
+        collections.forEach(col -> {
+            final String href = format("%s/%s", req.getRequestURL(), col.getId());
+            col.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref(href).build());
+            col.addLink(Link.create().withRel("edit").withMethod(Link.Method.PUT).withHref(href).build());
+            col.addLink(Link.create().withRel("delete").withMethod(Link.Method.DELETE).withHref(href).build());
+        });
         sendResponse(resp, collections);
     }
 }
