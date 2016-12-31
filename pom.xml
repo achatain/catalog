@@ -21,6 +21,7 @@
         <achatain-java-webapp-authentication-version>1.0.1</achatain-java-webapp-authentication-version>
         <mongodb-driver-version>3.4.0</mongodb-driver-version>
         <mockito-version>2.3.5</mockito-version>
+        <apache-commons-lang3-version>3.5</apache-commons-lang3-version>
         <unit-test-threadcount>1</unit-test-threadcount>
         <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
         <mongodb.url>mongodb://localhost</mongodb.url>
@@ -61,6 +62,11 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
             <version>${mongodb-driver-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache-commons-lang3-version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -26,4 +26,6 @@ import java.util.List;
 public interface CollectionDao {
 
     List<Collection> listCollections(final String userId);
+
+    void createCollection(final String userId, final Collection collection);
 }

@@ -30,6 +30,11 @@ import java.io.IOException;
 public class CollectionNameServlet extends HttpServlet {
 
     @Override
+    protected void doPut(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Edit a collection named " + req.getQueryString());
+    }
+
+    @Override
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Delete collection named " + req.getRequestURI());
     }

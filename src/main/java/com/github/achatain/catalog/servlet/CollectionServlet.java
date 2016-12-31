@@ -19,10 +19,11 @@
 
 package com.github.achatain.catalog.servlet;
 
-import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.dto.CollectionDto;
 import com.github.achatain.catalog.entity.Link;
 import com.github.achatain.catalog.service.CollectionService;
 import com.github.achatain.javawebappauthentication.service.SessionService;
+import com.google.api.client.util.Preconditions;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -33,11 +34,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static java.lang.String.format;
 
 @Singleton
 public class CollectionServlet extends AuthenticatedJsonHttpServlet {
+
+    private static final transient Logger LOG = Logger.getLogger(CollectionServlet.class.getName());
 
     private final transient CollectionService collectionService;
 
@@ -49,8 +53,9 @@ public class CollectionServlet extends AuthenticatedJsonHttpServlet {
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("List all collections " + req.getRequestURI());
-        final List<Collection> collections = collectionService.listCollections(getUserId(req));
+        final String userId = getUserId(req);
+        LOG.info(format("List all collections for user [%s]", userId) + req.getRequestURI());
+        final List<CollectionDto> collections = collectionService.listCollections(userId);
         collections.forEach(col -> {
             final String href = format("%s/%s", req.getRequestURL(), col.getId());
             col.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref(href).build());
@@ -58,5 +63,14 @@ public class CollectionServlet extends AuthenticatedJsonHttpServlet {
             col.addLink(Link.create().withRel("delete").withMethod(Link.Method.DELETE).withHref(href).build());
         });
         sendResponse(resp, collections);
+    }
+
+    @Override
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        final String userId = getUserId(req);
+        final CollectionDto collectionDto = gson.fromJson(req.getReader(), CollectionDto.class);
+        Preconditions.checkArgument(collectionDto != null, "Request body is missing");
+        LOG.info(format("User [%s] to create the collection [%s]", userId, gson.toJson(collectionDto)));
+        collectionService.createCollection(userId, collectionDto);
     }
 }

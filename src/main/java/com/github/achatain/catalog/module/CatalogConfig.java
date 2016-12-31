@@ -44,6 +44,7 @@ class CatalogConfig extends GuiceServletContextListener {
     protected Injector getInjector() {
         return Guice.createInjector(
                 new AuthenticationModule(),
+//                new MockedAuthenticationModule(),
                 new CatalogDatabaseModule(mongoClient),
                 new CatalogBusinessModule(),
                 new CatalogFilterModule(properties),

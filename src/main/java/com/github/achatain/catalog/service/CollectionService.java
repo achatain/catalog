@@ -19,14 +19,16 @@
 
 package com.github.achatain.catalog.service;
 
-import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.dto.CollectionDto;
 import com.github.achatain.catalog.entity.Item;
 
 import java.util.List;
 
 public interface CollectionService {
 
-    List<Collection> listCollections(final String userId);
+    List<CollectionDto> listCollections(final String userId);
+
+    void createCollection(final String userId, final CollectionDto collectionDto);
 
     void deleteCollection(String name);
 

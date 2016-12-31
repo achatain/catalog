@@ -20,12 +20,18 @@
 package com.github.achatain.catalog.service.impl;
 
 import com.github.achatain.catalog.dao.CollectionDao;
+import com.github.achatain.catalog.dto.CollectionDto;
 import com.github.achatain.catalog.entity.Collection;
 import com.github.achatain.catalog.entity.Item;
 import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.removePattern;
 
 public class CollectionServiceImpl implements CollectionService {
 
@@ -37,8 +43,27 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public List<Collection> listCollections(final String userId) {
-        return collectionDao.listCollections(userId);
+    public List<CollectionDto> listCollections(final String userId) {
+        final List<Collection> collections = collectionDao.listCollections(userId);
+
+        final Function<Collection, CollectionDto> colToColDto = col -> CollectionDto.create()
+                .withId(col.getId())
+                .withName(col.getName())
+                .withFields(col.getFields())
+                .build();
+
+        return collections.stream().map(colToColDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void createCollection(final String userId, final CollectionDto collectionDto) {
+        final Collection collection = Collection.create()
+                .withId(lowerCase(removePattern(collectionDto.getName(), "\\W")))
+                .withName(collectionDto.getName())
+                .withFields(collectionDto.getFields())
+                .build();
+
+        this.collectionDao.createCollection(userId, collection);
     }
 
     @Override

@@ -17,17 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.entity;
+package com.github.achatain.catalog.dto;
+
+import com.github.achatain.catalog.entity.Field;
 
 import java.util.List;
 
-public final class Collection {
+public final class CollectionDto extends HateoasDto {
 
     private String id;
     private String name;
     private List<Field> fields;
 
-    private Collection() {
+    private CollectionDto() {
+        super();
     }
 
     public String getId() {
@@ -70,12 +73,12 @@ public final class Collection {
             return this;
         }
 
-        public Collection build() {
-            final Collection collection = new Collection();
-            collection.id = id;
-            collection.name = name;
-            collection.fields = fields;
-            return collection;
+        public CollectionDto build() {
+            final CollectionDto collectionDto = new CollectionDto();
+            collectionDto.id = id;
+            collectionDto.name = name;
+            collectionDto.fields = fields;
+            return collectionDto;
         }
     }
 }

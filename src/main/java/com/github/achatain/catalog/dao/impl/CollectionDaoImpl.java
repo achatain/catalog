@@ -25,6 +25,7 @@ import com.github.achatain.catalog.entity.Collection;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 import javax.inject.Inject;
@@ -41,12 +42,21 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
         super(mongoClient, gson);
     }
 
+    private MongoCollection<Document> getMongoCollection(final String userId) {
+        return getDatabase(userId).getCollection(COLLECTIONS_COLLECTION_NAME);
+    }
+
     @Override
     public List<Collection> listCollections(final String userId) {
-        final FindIterable<Document> foundCollections = getDatabase(userId).getCollection(COLLECTIONS_COLLECTION_NAME).find();
+        final FindIterable<Document> foundCollections = getMongoCollection(userId).find();
         final List<Collection> collections = new ArrayList<>();
         final Consumer<Document> docToCol = doc -> collections.add(gson.fromJson(doc.toJson(), Collection.class));
         foundCollections.forEach(docToCol);
         return collections;
+    }
+
+    @Override
+    public void createCollection(final String userId, final Collection collection) {
+        getMongoCollection(userId).insertOne(Document.parse(gson.toJson(collection)));
     }
 }

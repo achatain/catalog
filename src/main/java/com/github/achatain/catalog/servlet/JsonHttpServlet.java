@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public abstract class JsonHttpServlet extends HttpServlet {
 
-    private final Gson gson;
+    protected final Gson gson;
 
     @Inject
     JsonHttpServlet(final Gson gson) {

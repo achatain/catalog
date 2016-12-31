@@ -17,17 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.entity;
+package com.github.achatain.catalog.dto;
 
+import com.github.achatain.catalog.entity.Link;
 import com.google.common.collect.Sets;
 
 import java.util.Set;
 
-public abstract class HateoasEntity {
+public abstract class HateoasDto {
 
-    private Set<Link> links;
+    private final Set<Link> links;
 
-    HateoasEntity() {
+    HateoasDto() {
         this.links = Sets.newHashSet();
     }
 
