@@ -28,4 +28,6 @@ public interface CollectionDao {
     List<Collection> listCollections(final String userId);
 
     void createCollection(final String userId, final Collection collection);
+
+    void deleteCollection(final String userId, final String collectionId);
 }

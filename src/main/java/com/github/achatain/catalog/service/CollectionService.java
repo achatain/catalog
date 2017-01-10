@@ -26,19 +26,19 @@ import java.util.List;
 
 public interface CollectionService {
 
-    List<CollectionDto> listCollections(final String userId);
+    List<CollectionDto> listCollections(String userId);
 
-    void createCollection(final String userId, final CollectionDto collectionDto);
+    void createCollection(String userId, CollectionDto collectionDto);
 
-    void deleteCollection(String name);
+    void deleteCollection(String userId, String collectionId);
 
-    List<Item> listItems(String collectionName);
+    List<Item> listItems(String userId, String collectionName);
 
-    void saveItem(Item item);
+    void saveItem(String userId, Item item);
 
-    Item getItem(String id);
+    Item getItem(String userId, String id);
 
-    void editItem(String id, Item item);
+    void editItem(String userId, String id, Item item);
 
-    void deleteItem(String id);
+    void deleteItem(String userId, String id);
 }

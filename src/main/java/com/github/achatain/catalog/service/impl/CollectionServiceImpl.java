@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.removePattern;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class CollectionServiceImpl implements CollectionService {
 
@@ -58,7 +57,7 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public void createCollection(final String userId, final CollectionDto collectionDto) {
         final Collection collection = Collection.create()
-                .withId(lowerCase(removePattern(collectionDto.getName(), "\\W")))
+                .withId(lowerCase(removePattern(stripAccents(collectionDto.getName()), "\\W")))
                 .withName(collectionDto.getName())
                 .withFields(collectionDto.getFields())
                 .build();
@@ -67,32 +66,32 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public void deleteCollection(final String name) {
+    public void deleteCollection(final String userId, final String collectionId) {
+        collectionDao.deleteCollection(userId, collectionId);
+    }
+
+    @Override
+    public List<Item> listItems(final String userId, final String collectionName) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public List<Item> listItems(final String collectionName) {
+    public void saveItem(final String userId, final Item item) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void saveItem(final Item item) {
+    public Item getItem(final String userId, final String id) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public Item getItem(final String id) {
+    public void editItem(final String userId, final String id, final Item item) {
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void editItem(final String id, final Item item) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void deleteItem(final String id) {
+    public void deleteItem(final String userId, final String id) {
         throw new RuntimeException("Not implemented");
     }
 }

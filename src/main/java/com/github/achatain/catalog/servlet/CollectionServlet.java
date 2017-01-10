@@ -41,6 +41,8 @@ import static java.lang.String.format;
 @Singleton
 public class CollectionServlet extends AuthenticatedJsonHttpServlet {
 
+    public static final String REGEX_PATH = "\\%s\\%s\\/collections(\\/)?";
+
     private static final transient Logger LOG = Logger.getLogger(CollectionServlet.class.getName());
 
     private final transient CollectionService collectionService;

@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     private static final String COLLECTIONS_COLLECTION_NAME = "collections_";
@@ -42,13 +44,13 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
         super(mongoClient, gson);
     }
 
-    private MongoCollection<Document> getMongoCollection(final String userId) {
+    private MongoCollection<Document> getMetaCollection(final String userId) {
         return getDatabase(userId).getCollection(COLLECTIONS_COLLECTION_NAME);
     }
 
     @Override
     public List<Collection> listCollections(final String userId) {
-        final FindIterable<Document> foundCollections = getMongoCollection(userId).find();
+        final FindIterable<Document> foundCollections = getMetaCollection(userId).find();
         final List<Collection> collections = new ArrayList<>();
         final Consumer<Document> docToCol = doc -> collections.add(gson.fromJson(doc.toJson(), Collection.class));
         foundCollections.forEach(docToCol);
@@ -57,6 +59,12 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     @Override
     public void createCollection(final String userId, final Collection collection) {
-        getMongoCollection(userId).insertOne(Document.parse(gson.toJson(collection)));
+        getMetaCollection(userId).insertOne(Document.parse(gson.toJson(collection)));
+    }
+
+    @Override
+    public void deleteCollection(final String userId, final String collectionId) {
+        getMetaCollection(userId).deleteOne(eq("id", collectionId));
+        getDatabase(userId).getCollection(collectionId).drop();
     }
 }

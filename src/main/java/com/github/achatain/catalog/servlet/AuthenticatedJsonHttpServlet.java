@@ -24,18 +24,53 @@ import com.google.gson.Gson;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
 
+    private static final String COL_NAME_REGEX = "(.+)(/collections/)(\\w+)(/.*)?";
+    private static final Integer COL_NAME_REGEX_GROUP = 3;
+
+    private static final String ITEM_NAME_REGEX = "(.+)(/collections/)(\\w+)(/items/)(\\w+)(/.*)?";
+    private static final Integer ITEM_NAME_REGEX_GROUP = 5;
+
+    private final Pattern colNamePattern;
+    private final Pattern itemNamePattern;
     private final SessionService sessionService;
 
     @Inject
     AuthenticatedJsonHttpServlet(final Gson gson, final SessionService sessionService) {
         super(gson);
         this.sessionService = sessionService;
+        this.colNamePattern = Pattern.compile(COL_NAME_REGEX);
+        this.itemNamePattern = Pattern.compile(ITEM_NAME_REGEX);
     }
 
     final String getUserId(final HttpServletRequest request) {
         return sessionService.getUserFromSession(request.getSession()).getId();
+    }
+
+    final Optional<String> extractCollectionNameFromRequest(final HttpServletRequest request) {
+        return extractFromRequest(request, colNamePattern, COL_NAME_REGEX_GROUP);
+    }
+
+    final Optional<String> extractItemNameFromRequest(final HttpServletRequest request) {
+        return extractFromRequest(request, itemNamePattern, ITEM_NAME_REGEX_GROUP);
+    }
+
+    private Optional<String> extractFromRequest(final HttpServletRequest request, final Pattern pattern, final int group) {
+        final Matcher matcher = pattern.matcher(request.getRequestURI());
+
+        final Optional<String> result;
+
+        if (matcher.matches() && matcher.groupCount() >= group) {
+            result = Optional.ofNullable(matcher.group(group));
+        } else {
+            result = Optional.empty();
+        }
+
+        return result;
     }
 }

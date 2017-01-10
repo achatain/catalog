@@ -37,9 +37,9 @@ class CatalogServletModule extends ServletModule {
         serve("/signout").with(SignOutServlet.class);
         serve("/cron").with(CronServlet.class);
 
-        serveRegex(format("\\%s\\%s\\/collections\\/\\w+\\/items\\/\\w+(\\/)?", API_ROOT_PATH, V1)).with(ItemIdServlet.class);
-        serveRegex(format("\\%s\\%s\\/collections\\/\\w+\\/items(\\/)?", API_ROOT_PATH, V1)).with(ItemServlet.class);
-        serveRegex(format("\\%s\\%s\\/collections\\/\\w+(\\/)?", API_ROOT_PATH, V1)).with(CollectionNameServlet.class);
-        serveRegex(format("\\%s\\%s\\/collections(\\/)?", API_ROOT_PATH, V1)).with(CollectionServlet.class);
+        serveRegex(format(ItemIdServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(ItemIdServlet.class);
+        serveRegex(format(ItemServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(ItemServlet.class);
+        serveRegex(format(CollectionNameServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionNameServlet.class);
+        serveRegex(format(CollectionServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionServlet.class);
     }
 }

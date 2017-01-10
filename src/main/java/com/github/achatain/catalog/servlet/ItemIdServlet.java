@@ -19,15 +19,27 @@
 
 package com.github.achatain.catalog.servlet;
 
+import com.github.achatain.javawebappauthentication.service.SessionService;
+import com.google.gson.Gson;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Singleton
-public class ItemIdServlet extends HttpServlet {
+public class ItemIdServlet extends AuthenticatedJsonHttpServlet {
+
+    public static final String REGEX_PATH = "\\%s\\%s\\/collections\\/\\w+\\/items\\/\\w+(\\/)?";
+
+    @Inject
+    ItemIdServlet(final SessionService sessionService, @Named("pretty") final Gson gson) {
+        super(gson, sessionService);
+    }
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
@@ -42,5 +54,9 @@ public class ItemIdServlet extends HttpServlet {
     @Override
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Delete item by id " + req.getRequestURI());
+
+        final Optional<String> optionalItemName = extractItemNameFromRequest(req);
+
+        System.out.println(optionalItemName);
     }
 }
