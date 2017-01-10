@@ -22,12 +22,15 @@ package com.github.achatain.catalog.dao;
 import com.github.achatain.catalog.entity.Collection;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CollectionDao {
 
-    List<Collection> listCollections(final String userId);
+    List<Collection> listCollections(String userId);
 
-    void createCollection(final String userId, final Collection collection);
+    Optional<Collection> findById(String userId, String collectionId);
 
-    void deleteCollection(final String userId, final String collectionId);
+    void createCollection(String userId, Collection collection);
+
+    void deleteCollection(String userId, String collectionId);
 }

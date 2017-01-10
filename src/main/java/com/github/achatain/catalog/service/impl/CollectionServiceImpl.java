@@ -27,9 +27,11 @@ import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.*;
 
 public class CollectionServiceImpl implements CollectionService {
@@ -56,13 +58,29 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public void createCollection(final String userId, final CollectionDto collectionDto) {
+        final String baseCollectionId = lowerCase(removePattern(stripAccents(collectionDto.getName()), "\\W"));
+
         final Collection collection = Collection.create()
-                .withId(lowerCase(removePattern(stripAccents(collectionDto.getName()), "\\W")))
+                .withId(findUniqueCollectionId(userId, baseCollectionId))
                 .withName(collectionDto.getName())
                 .withFields(collectionDto.getFields())
                 .build();
 
         this.collectionDao.createCollection(userId, collection);
+    }
+
+    private String findUniqueCollectionId(final String userId, final String baseCollectionId) {
+        final Optional<Collection> optionalCollection = collectionDao.findById(userId, baseCollectionId);
+
+        if (optionalCollection.isPresent()) {
+            int suffix = 1;
+            while (collectionDao.findById(userId, format("%s%s", baseCollectionId, suffix)).isPresent()) {
+                suffix++;
+            }
+            return format("%s%s", baseCollectionId, suffix);
+        } else {
+            return baseCollectionId;
+        }
     }
 
     @Override

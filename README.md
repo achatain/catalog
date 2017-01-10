@@ -13,13 +13,13 @@ A catalog app to organise collections of items.
 
 **GET** *list all collections*
 
-**POST** *create a collection* (TODO: ensure short name unicity at creation)
+**POST** *create a collection*
 
 ### /collections/{colname}
 
 **PUT** *edit the named collection* (TODO)
 
-**DELETE** *delete the named collection and its entire content* (TODO)
+**DELETE** *delete the named collection and its entire content*
 
 ### /collections/{colname}/items
 

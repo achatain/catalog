@@ -31,6 +31,7 @@ import org.bson.Document;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -55,6 +56,12 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
         final Consumer<Document> docToCol = doc -> collections.add(gson.fromJson(doc.toJson(), Collection.class));
         foundCollections.forEach(docToCol);
         return collections;
+    }
+
+    @Override
+    public Optional<Collection> findById(String userId, String collectionId) {
+        final Optional<Document> foundDocument = Optional.ofNullable(getMetaCollection(userId).find(eq("id", collectionId)).first());
+        return foundDocument.map(doc -> Optional.of(gson.fromJson(doc.toJson(), Collection.class))).orElseGet(Optional::empty);
     }
 
     @Override
