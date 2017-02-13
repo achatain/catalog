@@ -1,7 +1,7 @@
 /*
  * https://github.com/achatain/catalog
  *
- * Copyright (C) 2016 Antoine Chatain (achatain [at] outlook [dot] com)
+ * Copyright (C) 2017 Antoine Chatain (achatain [at] outlook [dot] com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
