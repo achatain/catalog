@@ -21,6 +21,7 @@ package com.github.achatain.catalog.servlet;
 
 import com.github.achatain.catalog.entity.HateoasResponse;
 import com.github.achatain.catalog.entity.Link;
+import com.google.api.client.http.HttpStatusCodes;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 
@@ -48,4 +49,11 @@ public abstract class JsonHttpServlet extends HttpServlet {
         sendResponse(response, hateoasResponse);
     }
 
+    final void sendCustomError(final HttpServletResponse response, final int code, final String msg) throws IOException {
+        response.sendError(code, msg);
+    }
+
+    final void sendNotFoundError(final HttpServletResponse response, final String msg) throws IOException {
+        sendCustomError(response, HttpStatusCodes.STATUS_CODE_NOT_FOUND, msg);
+    }
 }

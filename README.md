@@ -17,20 +17,22 @@ A catalog app to organise collections of items.
 
 ### /collections/{colname}
 
-**PUT** *edit the named collection* (TODO)
+**GET** *get a collection by name*
 
-**DELETE** *delete the named collection and its entire content*
+**PUT** *edit the given collection*
+
+**DELETE** *delete the given collection and its entire content*
 
 ### /collections/{colname}/items
 
-**GET** *list all items in the named collection* (TODO)
+**GET** *list all items in the given collection* (TODO)
 
-**POST** *store the provided item in the named collection* (TODO)
+**POST** *store the provided item in the given collection* (TODO)
 
 ### /collections/{colname}/items/{itemid}
 
-**GET** *return an item by id from the named collection* (TODO)
+**GET** *get an item by id from the given collection* (TODO)
 
-**PUT** *edit an item by id from the named collection* (TODO)
+**PUT** *edit an item by id from the given collection* (TODO)
 
-**DELETE** *delete an item by id from the named collection* (TODO)
+**DELETE** *delete an item by id from the given collection* (TODO)

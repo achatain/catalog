@@ -19,6 +19,7 @@
 
 package com.github.achatain.catalog.module;
 
+import com.github.achatain.catalog.filter.JsonResponseFilter;
 import com.github.achatain.javawebappauthentication.filter.SessionFilter;
 import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
@@ -45,6 +46,7 @@ public class CatalogFilterModule extends ServletModule {
 
         filter("/needs-session/*").through(SessionFilter.class, initParams);
         filter(API_ROOT_PATH + V1 + "/*").through(SessionFilter.class, initParams);
+        filter(API_ROOT_PATH + V1 + "/*").through(JsonResponseFilter.class);
     }
 
     @Provides

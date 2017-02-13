@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 
 @Singleton
 public class CollectionServlet extends AuthenticatedJsonHttpServlet {
@@ -59,7 +60,7 @@ public class CollectionServlet extends AuthenticatedJsonHttpServlet {
         LOG.info(format("List all collections for user [%s]", userId) + req.getRequestURI());
         final List<CollectionDto> collections = collectionService.listCollections(userId);
         collections.forEach(col -> {
-            final String href = format("%s/%s", req.getRequestURL(), col.getId());
+            final String href = format("%s%s", appendIfMissing(req.getRequestURL().toString(), "/"), col.getId());
             col.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref(href).build());
             col.addLink(Link.create().withRel("edit").withMethod(Link.Method.PUT).withHref(href).build());
             col.addLink(Link.create().withRel("delete").withMethod(Link.Method.DELETE).withHref(href).build());

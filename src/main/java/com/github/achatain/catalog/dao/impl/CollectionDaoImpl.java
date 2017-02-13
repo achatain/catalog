@@ -27,12 +27,14 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -49,6 +51,8 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
         return getDatabase(userId).getCollection(COLLECTIONS_COLLECTION_NAME);
     }
 
+    private Function<String, Bson> idFilter = id -> eq("id", id);
+
     @Override
     public List<Collection> listCollections(final String userId) {
         final FindIterable<Document> foundCollections = getMetaCollection(userId).find();
@@ -60,7 +64,7 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     @Override
     public Optional<Collection> findById(String userId, String collectionId) {
-        final Optional<Document> foundDocument = Optional.ofNullable(getMetaCollection(userId).find(eq("id", collectionId)).first());
+        final Optional<Document> foundDocument = Optional.ofNullable(getMetaCollection(userId).find(idFilter.apply(collectionId)).first());
         return foundDocument.map(doc -> Optional.of(gson.fromJson(doc.toJson(), Collection.class))).orElseGet(Optional::empty);
     }
 
@@ -71,7 +75,12 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     @Override
     public void deleteCollection(final String userId, final String collectionId) {
-        getMetaCollection(userId).deleteOne(eq("id", collectionId));
+        getMetaCollection(userId).deleteOne(idFilter.apply(collectionId));
         getDatabase(userId).getCollection(collectionId).drop();
+    }
+
+    @Override
+    public void updateCollection(final String userId, final Collection collection) {
+        getMetaCollection(userId).findOneAndReplace(idFilter.apply(collection.getId()), Document.parse(gson.toJson(collection)));
     }
 }

@@ -47,13 +47,12 @@ public class CollectionServiceImpl implements CollectionService {
     public List<CollectionDto> listCollections(final String userId) {
         final List<Collection> collections = collectionDao.listCollections(userId);
 
-        final Function<Collection, CollectionDto> colToColDto = col -> CollectionDto.create()
-                .withId(col.getId())
-                .withName(col.getName())
-                .withFields(col.getFields())
-                .build();
-
         return collections.stream().map(colToColDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<CollectionDto> readCollection(final String userId, final String collectionId) {
+        return collectionDao.findById(userId, collectionId).map(colToColDto);
     }
 
     @Override
@@ -67,6 +66,49 @@ public class CollectionServiceImpl implements CollectionService {
                 .build();
 
         this.collectionDao.createCollection(userId, collection);
+    }
+
+    @Override
+    public void updateCollection(final String userId, final String collectionId, final CollectionDto collectionDto) {
+        collectionDao.findById(userId, collectionId).orElseThrow(() -> new RuntimeException(format("No collection found with name [%s]", collectionId)));
+
+        final Collection collection = Collection.create()
+                .withId(collectionId)
+                .withName(collectionDto.getName())
+                .withFields(collectionDto.getFields())
+                .build();
+
+        this.collectionDao.updateCollection(userId, collection);
+    }
+
+    @Override
+    public void deleteCollection(final String userId, final String collectionId) {
+        collectionDao.deleteCollection(userId, collectionId);
+    }
+
+    @Override
+    public List<Item> listItems(final String userId, final String collectionName) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void createItem(final String userId, final Item item) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public Item readItem(final String userId, final String id) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void updateItem(final String userId, final String id, final Item item) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void deleteItem(final String userId, final String id) {
+        throw new RuntimeException("Not implemented");
     }
 
     private String findUniqueCollectionId(final String userId, final String baseCollectionId) {
@@ -83,33 +125,9 @@ public class CollectionServiceImpl implements CollectionService {
         }
     }
 
-    @Override
-    public void deleteCollection(final String userId, final String collectionId) {
-        collectionDao.deleteCollection(userId, collectionId);
-    }
-
-    @Override
-    public List<Item> listItems(final String userId, final String collectionName) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void saveItem(final String userId, final Item item) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public Item getItem(final String userId, final String id) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void editItem(final String userId, final String id, final Item item) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void deleteItem(final String userId, final String id) {
-        throw new RuntimeException("Not implemented");
-    }
+    private final Function<Collection, CollectionDto> colToColDto = col -> CollectionDto.create()
+            .withId(col.getId())
+            .withName(col.getName())
+            .withFields(col.getFields())
+            .build();
 }

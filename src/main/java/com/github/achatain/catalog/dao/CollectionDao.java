@@ -33,4 +33,6 @@ public interface CollectionDao {
     void createCollection(String userId, Collection collection);
 
     void deleteCollection(String userId, String collectionId);
+
+    void updateCollection(String userId, Collection collection);
 }
