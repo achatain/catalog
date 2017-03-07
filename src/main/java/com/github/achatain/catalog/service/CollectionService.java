@@ -20,7 +20,6 @@
 package com.github.achatain.catalog.service;
 
 import com.github.achatain.catalog.dto.CollectionDto;
-import com.github.achatain.catalog.entity.Item;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,14 +35,4 @@ public interface CollectionService {
     void updateCollection(String userId, String collectionId, CollectionDto collectionDto);
 
     void deleteCollection(String userId, String collectionId);
-
-    List<Item> listItems(String userId, String collectionName);
-
-    void createItem(String userId, Item item);
-
-    Item readItem(String userId, String id);
-
-    void updateItem(String userId, String id, Item item);
-
-    void deleteItem(String userId, String id);
 }

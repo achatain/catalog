@@ -22,7 +22,6 @@ package com.github.achatain.catalog.service.impl;
 import com.github.achatain.catalog.dao.CollectionDao;
 import com.github.achatain.catalog.dto.CollectionDto;
 import com.github.achatain.catalog.entity.Collection;
-import com.github.achatain.catalog.entity.Item;
 import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
@@ -84,31 +83,6 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public void deleteCollection(final String userId, final String collectionId) {
         collectionDao.deleteCollection(userId, collectionId);
-    }
-
-    @Override
-    public List<Item> listItems(final String userId, final String collectionName) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void createItem(final String userId, final Item item) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public Item readItem(final String userId, final String id) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void updateItem(final String userId, final String id, final Item item) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    @Override
-    public void deleteItem(final String userId, final String id) {
-        throw new RuntimeException("Not implemented");
     }
 
     private String findUniqueCollectionId(final String userId, final String baseCollectionId) {

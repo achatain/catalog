@@ -20,14 +20,18 @@
 package com.github.achatain.catalog.module;
 
 import com.github.achatain.catalog.dao.CollectionDao;
+import com.github.achatain.catalog.dao.ItemDao;
 import com.github.achatain.catalog.dao.UserDao;
 import com.github.achatain.catalog.dao.impl.CollectionDaoImpl;
+import com.github.achatain.catalog.dao.impl.ItemDaoImpl;
 import com.github.achatain.catalog.dao.impl.UserDaoImpl;
 import com.github.achatain.catalog.service.CollectionService;
 import com.github.achatain.catalog.service.CronService;
+import com.github.achatain.catalog.service.ItemService;
 import com.github.achatain.catalog.service.UserService;
 import com.github.achatain.catalog.service.impl.CollectionServiceImpl;
 import com.github.achatain.catalog.service.impl.CronServiceImpl;
+import com.github.achatain.catalog.service.impl.ItemServiceImpl;
 import com.github.achatain.catalog.service.impl.UserServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,6 +46,9 @@ class CatalogBusinessModule extends AbstractModule {
 
         bind(CollectionDao.class).to(CollectionDaoImpl.class);
         bind(CollectionService.class).to(CollectionServiceImpl.class);
+
+        bind(ItemDao.class).to(ItemDaoImpl.class);
+        bind(ItemService.class).to(ItemServiceImpl.class);
 
         bind(UserDao.class).to(UserDaoImpl.class);
         bind(UserService.class).to(UserServiceImpl.class);

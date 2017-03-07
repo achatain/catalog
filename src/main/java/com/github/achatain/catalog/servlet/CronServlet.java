@@ -28,9 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Singleton
 public class CronServlet extends HttpServlet {
@@ -44,14 +42,14 @@ public class CronServlet extends HttpServlet {
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        Map<String, String> headers = new HashMap<>();
+        Map<String, Collection<String>> headers = new HashMap<>();
 
         String header;
         final Enumeration<String> headerEnum = req.getHeaderNames();
 
         while (headerEnum.hasMoreElements()) {
             header = headerEnum.nextElement();
-            headers.put(header, req.getHeader(header));
+            headers.put(header, Collections.list(req.getHeaders(header)));
         }
 
         cronService.acknowledgeCronRequest(headers);

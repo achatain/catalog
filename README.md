@@ -25,9 +25,9 @@ A catalog app to organise collections of items.
 
 ### /collections/{colname}/items
 
-**GET** *list all items in the given collection* (TODO)
+**GET** *list all items in the given collection*
 
-**POST** *store the provided item in the given collection* (TODO)
+**POST** *store the provided item in the given collection*
 
 ### /collections/{colname}/items/{itemid}
 

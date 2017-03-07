@@ -17,28 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.entity;
+package com.github.achatain.catalog.dto;
 
 import com.google.common.collect.Maps;
-import org.bson.types.ObjectId;
 
 import java.util.Map;
 
-public final class Item {
+public class ItemDto extends HateoasDto {
 
-    private ObjectId _id;
     private Map<String, Object> attributes;
 
-    private Item() {
+    private ItemDto() {
     }
 
     public Map<String, Object> getAttributes() {
         return attributes;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" + "attributes=" + attributes + '}';
     }
 
     public static Builder create() {
@@ -48,9 +41,6 @@ public final class Item {
     public static class Builder {
 
         private final Map<String, Object> attributes = Maps.newHashMap();
-
-        private Builder() {
-        }
 
         public Builder withAttribute(final String key, final Object value) {
             this.attributes.put(key, value);
@@ -62,10 +52,10 @@ public final class Item {
             return this;
         }
 
-        public Item build() {
-            final Item item = new Item();
-            item.attributes = attributes;
-            return item;
+        public ItemDto build() {
+            final ItemDto itemDto = new ItemDto();
+            itemDto.attributes = attributes;
+            return itemDto;
         }
     }
 }

@@ -21,6 +21,7 @@ package com.github.achatain.catalog.service.impl;
 
 import com.github.achatain.catalog.service.CronService;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -31,7 +32,7 @@ public class CronServiceImpl implements CronService {
     private static final Logger LOGGER = Logger.getLogger(CronServiceImpl.class.getName());
 
     @Override
-    public void acknowledgeCronRequest(final Map<String, String> headers) {
+    public void acknowledgeCronRequest(final Map<String, Collection<String>> headers) {
         LOGGER.info(format("Cron request received. Headers are [%s]", headers));
     }
 }

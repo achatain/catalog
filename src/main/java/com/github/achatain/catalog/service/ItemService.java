@@ -19,10 +19,19 @@
 
 package com.github.achatain.catalog.service;
 
-import java.util.Collection;
-import java.util.Map;
+import com.github.achatain.catalog.dto.ItemDto;
 
-public interface CronService {
+import java.util.List;
 
-    void acknowledgeCronRequest(Map<String, Collection<String>> headers);
+public interface ItemService {
+
+    List<ItemDto> listItems(String userId, String collectionId);
+
+    void createItem(String userId, String collectionId, ItemDto itemDto);
+
+    ItemDto readItem(String userId, String collectionId, String itemId);
+
+    void updateItem(String userId, String collectionId, ItemDto item);
+
+    void deleteItem(String userId, String collectionId, String itemId);
 }

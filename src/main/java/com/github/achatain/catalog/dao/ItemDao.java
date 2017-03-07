@@ -17,12 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.achatain.catalog.service;
+package com.github.achatain.catalog.dao;
 
-import java.util.Collection;
-import java.util.Map;
+import com.github.achatain.catalog.entity.Item;
 
-public interface CronService {
+import java.util.List;
 
-    void acknowledgeCronRequest(Map<String, Collection<String>> headers);
+public interface ItemDao {
+
+    List<Item> listItems(String userId, String collectionName);
+
+    void createItem(String userId, String collectionId, Item item);
+
+    Item readItem(String userId, String id);
+
+    void updateItem(String userId, String id, Item item);
+
+    void deleteItem(String userId, String id);
 }
