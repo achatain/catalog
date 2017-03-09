@@ -1,5 +1,6 @@
 Catalog
 ============
+[![Build Status](https://travis-ci.org/achatain/catalog.svg?branch=master)](https://travis-ci.org/achatain/catalog)
 
 https://github.com/achatain/catalog
 
