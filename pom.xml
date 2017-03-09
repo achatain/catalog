@@ -9,8 +9,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
-        <mongodb.url>mongodb://localhost</mongodb.url>
         <unit.test.threadcount>1</unit.test.threadcount>
         <version.servlet>3.1.0</version.servlet>
         <version.guice>4.1.0</version.guice>
@@ -22,7 +20,7 @@
         <version.java>1.8</version.java>
         <version.maven.surefire>2.19.1</version.maven.surefire>
         <version.achatain.java.webapp.authentication>1.1.0</version.achatain.java.webapp.authentication>
-        <version.mongodb.driver>3.4.0</version.mongodb.driver>
+        <version.mongodb.driver>3.4.2</version.mongodb.driver>
         <version.mockito>2.3.5</version.mockito>
         <version.apache.commons.lang3>3.5</version.apache.commons.lang3>
     </properties>
@@ -129,6 +127,23 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
+                <mongodb.url>mongodb://localhost</mongodb.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>atlas</id>
+            <properties>
+                <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
+                <mongodb.url>${env.ATLAS_MONGODB_DB_URL}</mongodb.url>
+            </properties>
+        </profile>
         <profile>
             <id>openshift</id>
             <properties>

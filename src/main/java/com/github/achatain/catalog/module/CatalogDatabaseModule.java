@@ -27,7 +27,7 @@ import com.mongodb.client.MongoDatabase;
 
 public class CatalogDatabaseModule extends AbstractModule {
 
-    public static final String SYSTEM_DATABASE = "system";
+    public static final String SYSTEM_DATABASE = "system_";
 
     private final MongoClient mongoClient;
     private final Provider<MongoDatabase> systemDatabaseProvider;

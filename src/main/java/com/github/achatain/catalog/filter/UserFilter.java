@@ -19,16 +19,26 @@
 
 package com.github.achatain.catalog.filter;
 
-import com.google.common.net.HttpHeaders;
-import com.google.common.net.MediaType;
+import com.github.achatain.catalog.service.UserService;
+import com.github.achatain.javawebappauthentication.service.SessionService;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Singleton
-public final class JsonResponseFilter implements Filter {
+public final class UserFilter implements Filter {
+
+    private final transient SessionService sessionService;
+    private final transient UserService userService;
+
+    @Inject
+    UserFilter(final SessionService sessionService, final UserService userService) {
+        this.sessionService = sessionService;
+        this.userService = userService;
+    }
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
@@ -37,9 +47,7 @@ public final class JsonResponseFilter implements Filter {
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-        final HttpServletResponse httpResp = (HttpServletResponse) response;
-        httpResp.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString());
-
+        sessionService.getUserFromSession(((HttpServletRequest) request).getSession()).ifPresent(userService::saveIfNotFound);
         chain.doFilter(request, response);
     }
 
