@@ -40,72 +40,66 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.removeEnd;
 
 @Singleton
-public class CollectionNameServlet extends AuthenticatedJsonHttpServlet {
+public class CollectionIdServlet extends AuthenticatedJsonHttpServlet {
 
     public static final String REGEX_PATH = "\\%s\\%s\\/collections\\/\\w+(\\/)?";
 
-    private static final transient Logger LOG = Logger.getLogger(CollectionNameServlet.class.getName());
+    private static final transient Logger LOG = Logger.getLogger(CollectionIdServlet.class.getName());
 
     private final transient CollectionService collectionService;
 
     @Inject
-    CollectionNameServlet(final SessionService sessionService, final CollectionService collectionService, @Named("pretty") final Gson gson) {
+    CollectionIdServlet(final SessionService sessionService, final CollectionService collectionService, @Named("pretty") final Gson gson) {
         super(gson, sessionService);
         this.collectionService = collectionService;
     }
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        LOG.info("Look up a collection named " + extractCollectionNameFromRequest(req));
+        LOG.info("Look up the collection " + extractCollectionIdFromRequest(req));
 
         final String userId = getUserId(req);
-        final Optional<String> optionalColName = extractCollectionNameFromRequest(req);
+        final String colId = extractCollectionIdFromRequest(req);
 
-        Preconditions.checkArgument(optionalColName.isPresent(), "No collection name was provided");
-
-        final String colName = optionalColName.get();
-        final Optional<CollectionDto> optionalCollectionDto = collectionService.readCollection(userId, colName);
+        final Optional<CollectionDto> optionalCollectionDto = collectionService.readCollection(userId, colId);
 
         if (optionalCollectionDto.isPresent()) {
             final CollectionDto col = optionalCollectionDto.get();
             final String href = removeEnd(req.getRequestURL().toString(), "/");
+            final String hrefItems = format("%s/items", href);
             col.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref(href).build());
             col.addLink(Link.create().withRel("edit").withMethod(Link.Method.PUT).withHref(href).build());
             col.addLink(Link.create().withRel("delete").withMethod(Link.Method.DELETE).withHref(href).build());
+            col.addLink(Link.create().withRel("list").withMethod(Link.Method.GET).withHref(hrefItems).build());
+            col.addLink(Link.create().withRel("add").withMethod(Link.Method.POST).withHref(hrefItems).build());
             sendResponse(resp, col);
         } else {
-            sendNotFoundError(resp, format("No collection was found with name [%s]", colName));
+            sendNotFoundError(resp, format("No collection was found with id [%s]", colId));
         }
     }
 
     @Override
     protected void doPut(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        LOG.info("Edit a collection named " + extractCollectionNameFromRequest(req));
+        LOG.info("Edit the collection " + extractCollectionIdFromRequest(req));
 
         final String userId = getUserId(req);
-        final Optional<String> optionalColName = extractCollectionNameFromRequest(req);
-
-        Preconditions.checkArgument(optionalColName.isPresent(), "No collection name was provided");
-        final String colName = optionalColName.get();
+        final String colId = extractCollectionIdFromRequest(req);
 
         final CollectionDto collectionDto = gson.fromJson(req.getReader(), CollectionDto.class);
         Preconditions.checkArgument(collectionDto != null, "Request body is missing");
 
-        LOG.info(format("User [%s] to edit the collection named [%s] with [%s]", userId, colName, gson.toJson(collectionDto)));
+        LOG.info(format("User [%s] to edit the collection [%s] with [%s]", userId, colId, gson.toJson(collectionDto)));
 
-        collectionService.updateCollection(userId, colName, collectionDto);
+        collectionService.updateCollection(userId, colId, collectionDto);
     }
 
     @Override
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
-        final Optional<String> optionalColName = extractCollectionNameFromRequest(req);
+        final String colId = extractCollectionIdFromRequest(req);
 
-        Preconditions.checkArgument(optionalColName.isPresent(), "No collection name was provided");
+        this.collectionService.deleteCollection(userId, colId);
 
-        final String colName = optionalColName.get();
-        this.collectionService.deleteCollection(userId, colName);
-
-        LOG.info(format("Deleted the collection [%s] for user [%s]", colName, userId));
+        LOG.info(format("Deleted the collection [%s] for user [%s]", colId, userId));
     }
 }

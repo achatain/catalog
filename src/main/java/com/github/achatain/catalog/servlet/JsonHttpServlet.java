@@ -19,10 +19,7 @@
 
 package com.github.achatain.catalog.servlet;
 
-import com.github.achatain.catalog.entity.HateoasResponse;
-import com.github.achatain.catalog.entity.Link;
 import com.google.api.client.http.HttpStatusCodes;
-import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -42,11 +39,6 @@ public abstract class JsonHttpServlet extends HttpServlet {
     final void sendResponse(final HttpServletResponse response, final Object body) throws IOException {
         response.getWriter().write(gson.toJson(body));
         response.getWriter().flush();
-    }
-
-    final void sendResponse(final HttpServletResponse response, final Object body, Link... links) throws IOException {
-        final HateoasResponse hateoasResponse = HateoasResponse.create().withObject(body).withLinks(Sets.newHashSet(links)).build();
-        sendResponse(response, hateoasResponse);
     }
 
     final void sendCustomError(final HttpServletResponse response, final int code, final String msg) throws IOException {

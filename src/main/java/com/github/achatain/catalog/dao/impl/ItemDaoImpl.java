@@ -25,13 +25,18 @@ import com.github.achatain.catalog.entity.Item;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
-import org.apache.commons.lang3.NotImplementedException;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class ItemDaoImpl extends MongoDao implements ItemDao {
 
@@ -40,12 +45,14 @@ public class ItemDaoImpl extends MongoDao implements ItemDao {
         super(mongoClient, gson);
     }
 
+    private Function<String, Bson> idFilter = id -> eq("_id", new ObjectId(id));
+
     @Override
-    public List<Item> listItems(final String userId, final String collectionName) {
-        final FindIterable<Document> foundItems = getDatabase(userId).getCollection(collectionName).find();
+    public List<Item> listItems(final String userId, final String collectionId) {
+        final FindIterable<Document> foundItems = getDatabase(userId).getCollection(collectionId).find();
         final List<Item> items = new ArrayList<>();
-        final Consumer<Document> docToItem = doc -> items.add(gson.fromJson(doc.toJson(), Item.class));
-        foundItems.forEach(docToItem);
+        final Consumer<Document> docConsumer = doc -> items.add(docToItem.apply(doc));
+        foundItems.forEach(docConsumer);
         return items;
     }
 
@@ -55,17 +62,25 @@ public class ItemDaoImpl extends MongoDao implements ItemDao {
     }
 
     @Override
-    public Item readItem(final String userId, final String id) {
-        throw new NotImplementedException("ItemDaoImpl.readItem");
+    public Optional<Item> readItem(final String userId, final String collectionId, final String itemId) {
+        final Optional<Document> foundDocument = Optional.ofNullable(getDatabase(userId).getCollection(collectionId).find(idFilter.apply(itemId)).first());
+        return foundDocument
+                .map(doc -> Optional.of(docToItem.apply(doc)))
+                .orElseGet(Optional::empty);
     }
 
     @Override
-    public void updateItem(final String userId, final String id, final Item item) {
-        throw new NotImplementedException("ItemDaoImpl.updateItem");
+    public void updateItem(final String userId, final String collectionId, final String itemId, final Item item) {
+        getDatabase(userId).getCollection(collectionId).findOneAndReplace(idFilter.apply(item.getId()), Document.parse(gson.toJson(item)));
     }
 
     @Override
-    public void deleteItem(final String userId, final String id) {
-        throw new NotImplementedException("ItemDaoImpl.deleteItem");
+    public void deleteItem(final String userId, final String collectionId, final String itemId) {
+        getDatabase(userId).getCollection(collectionId).deleteOne(idFilter.apply(itemId));
     }
+
+    private final Function<Document, Item> docToItem = doc -> Item.create()
+            .withId(doc.getObjectId("_id").toHexString())
+            .withAttributes(gson.fromJson(doc.toJson(), Item.class).getAttributes())
+            .build();
 }

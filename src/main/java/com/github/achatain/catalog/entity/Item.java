@@ -20,16 +20,19 @@
 package com.github.achatain.catalog.entity;
 
 import com.google.common.collect.Maps;
-import org.bson.types.ObjectId;
 
 import java.util.Map;
 
 public final class Item {
 
-    private ObjectId _id;
+    private String id;
     private Map<String, Object> attributes;
 
     private Item() {
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Map<String, Object> getAttributes() {
@@ -38,7 +41,7 @@ public final class Item {
 
     @Override
     public String toString() {
-        return "Item{" + "attributes=" + attributes + '}';
+        return "Item{" + "id='" + id + '\'' + ", attributes=" + attributes + '}';
     }
 
     public static Builder create() {
@@ -47,9 +50,15 @@ public final class Item {
 
     public static class Builder {
 
+        private String id;
         private final Map<String, Object> attributes = Maps.newHashMap();
 
         private Builder() {
+        }
+
+        public Builder withId(final String id) {
+            this.id = id;
+            return this;
         }
 
         public Builder withAttribute(final String key, final Object value) {
@@ -64,6 +73,7 @@ public final class Item {
 
         public Item build() {
             final Item item = new Item();
+            item.id = id;
             item.attributes = attributes;
             return item;
         }

@@ -26,7 +26,10 @@ import com.github.achatain.catalog.service.ItemService;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 public class ItemServiceImpl implements ItemService {
 
@@ -43,6 +46,7 @@ public class ItemServiceImpl implements ItemService {
                 .listItems(userId, collectionId)
                 .stream()
                 .map(item -> ItemDto.create()
+                        .withId(item.getId())
                         .withAttributes(item.getAttributes())
                         .build())
                 .collect(Collectors.toList());
@@ -54,22 +58,29 @@ public class ItemServiceImpl implements ItemService {
                 .withAttributes(itemDto.getAttributes())
                 .build();
 
-        this.itemDao.createItem(userId, collectionId, item);
+        itemDao.createItem(userId, collectionId, item);
     }
 
     @Override
-    public ItemDto readItem(final String userId, final String collectionId, final String itemId) {
-        throw new RuntimeException("Not implemented");
+    public Optional<ItemDto> readItem(final String userId, final String collectionId, final String itemId) {
+        return itemDao.readItem(userId, collectionId, itemId).map(item -> ItemDto.create().withId(item.getId()).withAttributes(item.getAttributes()).build());
     }
 
     @Override
-    public void updateItem(final String userId, final String collectionId, final ItemDto item) {
-        throw new RuntimeException("Not implemented");
+    public void updateItem(final String userId, final String collectionId, final String itemId, final ItemDto itemDto) {
+        itemDao.readItem(userId, collectionId, itemId).orElseThrow(() -> new RuntimeException(format("No item found with id [%s] in collection [%s]", itemId, collectionId)));
+
+        final Item item = Item.create()
+                .withId(itemDto.getId())
+                .withAttributes(itemDto.getAttributes())
+                .build();
+
+        itemDao.updateItem(userId, collectionId, itemId, item);
     }
 
     @Override
     public void deleteItem(final String userId, final String collectionId, final String itemId) {
-        throw new RuntimeException("Not implemented");
+        itemDao.deleteItem(userId, collectionId, itemId);
     }
 
 }

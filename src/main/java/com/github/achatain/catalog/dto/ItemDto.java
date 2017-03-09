@@ -25,9 +25,14 @@ import java.util.Map;
 
 public class ItemDto extends HateoasDto {
 
+    private String id;
     private Map<String, Object> attributes;
 
     private ItemDto() {
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Map<String, Object> getAttributes() {
@@ -40,7 +45,13 @@ public class ItemDto extends HateoasDto {
 
     public static class Builder {
 
+        private String id;
         private final Map<String, Object> attributes = Maps.newHashMap();
+
+        public Builder withId(final String id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder withAttribute(final String key, final Object value) {
             this.attributes.put(key, value);
@@ -54,6 +65,7 @@ public class ItemDto extends HateoasDto {
 
         public ItemDto build() {
             final ItemDto itemDto = new ItemDto();
+            itemDto.id = id;
             itemDto.attributes = attributes;
             return itemDto;
         }

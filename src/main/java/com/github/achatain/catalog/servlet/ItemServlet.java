@@ -34,11 +34,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.removeEnd;
+import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 
 @Singleton
 public class ItemServlet extends AuthenticatedJsonHttpServlet {
@@ -58,20 +57,17 @@ public class ItemServlet extends AuthenticatedJsonHttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
+        final String colId = extractCollectionIdFromRequest(req);
 
-        final Optional<String> optionalColName = extractCollectionNameFromRequest(req);
-        Preconditions.checkArgument(optionalColName.isPresent(), "No collection name was provided");
-        final String colName = optionalColName.get();
+        LOG.info(format("List all items in the collection [%s]", colId));
 
-        LOG.info(format("List all items in the collection named [%s]", colName));
-
-        final List<ItemDto> items = itemService.listItems(userId, colName);
+        final List<ItemDto> items = itemService.listItems(userId, colId);
 
         items.forEach(item -> {
-            // TODO add ids to Item entity and dto, refactor below links accordingly
-            final String href = removeEnd(req.getRequestURL().toString(), "/");
+            final String href = format("%s%s", appendIfMissing(req.getRequestURL().toString(), "/"), item.getId());
             item.addLink(Link.create().withRel("self").withMethod(Link.Method.GET).withHref(href).build());
-            item.addLink(Link.create().withRel("create").withMethod(Link.Method.POST).withHref(href).build());
+            item.addLink(Link.create().withRel("edit").withMethod(Link.Method.PUT).withHref(href).build());
+            item.addLink(Link.create().withRel("delete").withMethod(Link.Method.DELETE).withHref(href).build());
         });
 
         sendResponse(resp, items);
@@ -80,16 +76,13 @@ public class ItemServlet extends AuthenticatedJsonHttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
-
-        final Optional<String> optionalColName = extractCollectionNameFromRequest(req);
-        Preconditions.checkArgument(optionalColName.isPresent(), "No collection name was provided");
-        final String colName = optionalColName.get();
+        final String colId = extractCollectionIdFromRequest(req);
 
         final ItemDto itemDto = gson.fromJson(req.getReader(), ItemDto.class);
         Preconditions.checkArgument(itemDto != null, "Request body is missing");
 
-        LOG.info(format("User [%s] to store the following item [%s] in the collection named [%s]", userId, gson.toJson(itemDto), colName));
+        LOG.info(format("User [%s] to store the following item [%s] in the collection [%s]", userId, gson.toJson(itemDto), colId));
 
-        itemService.createItem(userId, colName, itemDto);
+        itemService.createItem(userId, colId, itemDto);
     }
 }

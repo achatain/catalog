@@ -22,6 +22,7 @@ package com.github.achatain.catalog.service;
 import com.github.achatain.catalog.dto.ItemDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemService {
 
@@ -29,9 +30,9 @@ public interface ItemService {
 
     void createItem(String userId, String collectionId, ItemDto itemDto);
 
-    ItemDto readItem(String userId, String collectionId, String itemId);
+    Optional<ItemDto> readItem(String userId, String collectionId, String itemId);
 
-    void updateItem(String userId, String collectionId, ItemDto item);
+    void updateItem(String userId, String collectionId, final String itemId, ItemDto itemDto);
 
     void deleteItem(String userId, String collectionId, String itemId);
 }

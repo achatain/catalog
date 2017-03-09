@@ -5,26 +5,26 @@
     <groupId>com.github.achatain</groupId>
     <artifactId>catalog</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <servlet.version>3.1.0</servlet.version>
-        <guice.version>4.1.0</guice.version>
-        <gson.version>2.8.0</gson.version>
-        <junit.version>4.12</junit.version>
-        <version.war.plugin>3.0.0</version.war.plugin>
-        <codehaus-mojo-version>2.3</codehaus-mojo-version>
-        <apache-maven-compiler-version>3.6.0</apache-maven-compiler-version>
-        <java-version>1.8</java-version>
-        <maven-surefire-version>2.19.1</maven-surefire-version>
-        <achatain-java-webapp-authentication-version>1.0.1</achatain-java-webapp-authentication-version>
-        <mongodb-driver-version>3.4.0</mongodb-driver-version>
-        <mockito-version>2.3.5</mockito-version>
-        <apache-commons-lang3-version>3.5</apache-commons-lang3-version>
-        <unit-test-threadcount>1</unit-test-threadcount>
         <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
         <mongodb.url>mongodb://localhost</mongodb.url>
+        <unit.test.threadcount>1</unit.test.threadcount>
+        <version.servlet>3.1.0</version.servlet>
+        <version.guice>4.1.0</version.guice>
+        <version.gson>2.8.0</version.gson>
+        <version.junit>4.12</version.junit>
+        <version.war.plugin>3.0.0</version.war.plugin>
+        <version.codehaus.mojo>2.3</version.codehaus.mojo>
+        <version.apache.maven.compiler>3.6.0</version.apache.maven.compiler>
+        <version.java>1.8</version.java>
+        <version.maven.surefire>2.19.1</version.maven.surefire>
+        <version.achatain.java.webapp.authentication>1.1.0</version.achatain.java.webapp.authentication>
+        <version.mongodb.driver>3.4.0</version.mongodb.driver>
+        <version.mockito>2.3.5</version.mockito>
+        <version.apache.commons.lang3>3.5</version.apache.commons.lang3>
     </properties>
 
     <prerequisites>
@@ -35,49 +35,49 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.version}</version>
+            <version>${version.servlet}</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>${guice.version}</version>
+            <version>${version.guice}</version>
             <classifier>no_aop</classifier>
         </dependency>
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
-            <version>${guice.version}</version>
+            <version>${version.guice}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
+            <version>${version.gson}</version>
         </dependency>
         <dependency>
             <groupId>com.github.achatain</groupId>
             <artifactId>java-webapp-authentication</artifactId>
-            <version>${achatain-java-webapp-authentication-version}</version>
+            <version>${version.achatain.java.webapp.authentication}</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
-            <version>${mongodb-driver-version}</version>
+            <version>${version.mongodb.driver}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${apache-commons-lang3-version}</version>
+            <version>${version.apache.commons.lang3}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito-version}</version>
+            <version>${version.mockito}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -96,25 +96,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${apache-maven-compiler-version}</version>
+                <version>${version.apache.maven.compiler}</version>
                 <configuration>
-                    <source>${java-version}</source>
-                    <target>${java-version}</target>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-version}</version>
+                <version>${version.maven.surefire}</version>
                 <configuration>
                     <parallel>methods</parallel>
-                    <threadCount>${unit-test-threadcount}</threadCount>
+                    <threadCount>${unit.test.threadcount}</threadCount>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>${codehaus-mojo-version}</version>
+                <version>${version.codehaus.mojo}</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>

@@ -39,7 +39,7 @@ class CatalogServletModule extends ServletModule {
 
         serveRegex(format(ItemIdServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(ItemIdServlet.class);
         serveRegex(format(ItemServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(ItemServlet.class);
-        serveRegex(format(CollectionNameServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionNameServlet.class);
+        serveRegex(format(CollectionIdServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionIdServlet.class);
         serveRegex(format(CollectionServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionServlet.class);
     }
 }

@@ -22,16 +22,17 @@ package com.github.achatain.catalog.dao;
 import com.github.achatain.catalog.entity.Item;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemDao {
 
-    List<Item> listItems(String userId, String collectionName);
+    List<Item> listItems(String userId, String collectionId);
 
     void createItem(String userId, String collectionId, Item item);
 
-    Item readItem(String userId, String id);
+    Optional<Item> readItem(String userId, String collectionId, String itemId);
 
-    void updateItem(String userId, String id, Item item);
+    void updateItem(String userId, String collectionId, String itemId, Item item);
 
-    void deleteItem(String userId, String id);
+    void deleteItem(String userId, String collectionId, String itemId);
 }

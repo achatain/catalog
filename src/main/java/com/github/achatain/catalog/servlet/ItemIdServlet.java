@@ -19,7 +19,10 @@
 
 package com.github.achatain.catalog.servlet;
 
+import com.github.achatain.catalog.dto.ItemDto;
+import com.github.achatain.catalog.service.ItemService;
 import com.github.achatain.javawebappauthentication.service.SessionService;
+import com.google.api.client.util.Preconditions;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -30,33 +33,62 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Logger;
+
+import static java.lang.String.format;
 
 @Singleton
 public class ItemIdServlet extends AuthenticatedJsonHttpServlet {
 
     public static final String REGEX_PATH = "\\%s\\%s\\/collections\\/\\w+\\/items\\/\\w+(\\/)?";
 
+    private static final Logger LOG = Logger.getLogger(ItemIdServlet.class.getName());
+
+    private final transient ItemService itemService;
+
     @Inject
-    ItemIdServlet(final SessionService sessionService, @Named("pretty") final Gson gson) {
+    ItemIdServlet(final SessionService sessionService, final ItemService itemService, @Named("pretty") final Gson gson) {
         super(gson, sessionService);
+        this.itemService = itemService;
     }
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Get item by id " + req.getRequestURI());
+        final String userId = getUserId(req);
+        final String collectionId = extractCollectionIdFromRequest(req);
+        final String itemId = extractItemIdFromRequest(req);
+
+        final Optional<ItemDto> optionalItem = itemService.readItem(userId, collectionId, itemId);
+
+        if (optionalItem.isPresent()) {
+            sendResponse(resp, optionalItem.get());
+        } else {
+            sendNotFoundError(resp, format("No item was found with id [%s] in collection [%s]", itemId, collectionId));
+        }
     }
 
     @Override
     protected void doPut(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Edit item by id " + req.getRequestURI());
+        final String userId = getUserId(req);
+        final String collectionId = extractCollectionIdFromRequest(req);
+        final String itemId = extractItemIdFromRequest(req);
+
+        final ItemDto itemDto = gson.fromJson(req.getReader(), ItemDto.class);
+        Preconditions.checkArgument(itemDto != null, "Request body is missing");
+
+        LOG.info(format("User [%s] to edit item [%s] in collection [%s] with [%s]", userId, itemId, collectionId, gson.toJson(itemDto)));
+
+        itemService.updateItem(userId, collectionId, itemId, itemDto);
     }
 
     @Override
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Delete item by id " + req.getRequestURI());
+        final String userId = getUserId(req);
+        final String collectionId = extractCollectionIdFromRequest(req);
+        final String itemId = extractItemIdFromRequest(req);
 
-        final Optional<String> optionalItemName = extractItemNameFromRequest(req);
+        LOG.info(format("User [%s] to delete item [%s] in collection [%s]", userId, itemId, collectionId));
 
-        System.out.println(optionalItemName);
+        itemService.deleteItem(userId, collectionId, itemId);
     }
 }

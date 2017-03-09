@@ -32,6 +32,7 @@ import org.mockito.Spy;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -62,7 +63,7 @@ public class AuthenticatedJsonHttpServletTest {
     @Test
     public void getUserId() throws Exception {
         when(request.getSession()).thenReturn(session);
-        when(sessionService.getUserFromSession(session)).thenReturn(AuthenticatedUser.create().withId("1").build());
+        when(sessionService.getUserFromSession(session)).thenReturn(Optional.of(AuthenticatedUser.create().withId("1").build()));
         assertThat(authenticatedJsonHttpServlet.getUserId(request), equalTo("1"));
     }
 
