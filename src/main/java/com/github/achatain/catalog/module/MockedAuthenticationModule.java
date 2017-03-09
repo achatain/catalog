@@ -1,7 +1,7 @@
 /*
  * https://github.com/achatain/catalog
  *
- * Copyright (C) 2016 Antoine Chatain (achatain [at] outlook [dot] com)
+ * Copyright (C) 2017 Antoine Chatain (achatain [at] outlook [dot] com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import com.google.inject.Singleton;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Optional;
 
 public class MockedAuthenticationModule extends AbstractModule {
 
@@ -75,14 +76,16 @@ public class MockedAuthenticationModule extends AbstractModule {
         }
 
         @Override
-        public AuthenticatedUser getUserFromSession(final HttpSession session) {
-            return AuthenticatedUser.create()
-                    .withId("goog-1234")
-                    .withName("Mocky")
-                    .withEmail("mocked.user@gmail.com")
-                    .withFamilyName("Mc Mock Face")
-                    .withGivenName("Mocky")
-                    .build();
+        public Optional<AuthenticatedUser> getUserFromSession(final HttpSession session) {
+            return Optional.of(
+                    AuthenticatedUser.create()
+                            .withId("goog-1234")
+                            .withName("Mocky")
+                            .withEmail("mocked.user@gmail.com")
+                            .withFamilyName("Mc Mock Face")
+                            .withGivenName("Mocky")
+                            .build()
+            );
         }
 
         @Override
@@ -100,5 +103,4 @@ public class MockedAuthenticationModule extends AbstractModule {
             return "http://localhost:8080/catalog";
         }
     }
-
 }
