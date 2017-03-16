@@ -35,4 +35,6 @@ public interface CollectionService {
     void updateCollection(String userId, String collectionId, CollectionDto collectionDto);
 
     void deleteCollection(String userId, String collectionId);
+
+//    void createIndex(String userId, String collectionId, String )
 }

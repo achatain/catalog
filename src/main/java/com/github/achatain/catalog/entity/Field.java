@@ -22,8 +22,17 @@ package com.github.achatain.catalog.entity;
 public final class Field {
 
     private String name;
+    private boolean indexed;
 
     private Field() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean getIndexed() {
+        return indexed;
     }
 
     public static Builder create() {
@@ -32,6 +41,7 @@ public final class Field {
 
     public static class Builder {
         private String name;
+        private boolean indexed;
 
         private Builder() {
         }
@@ -41,9 +51,15 @@ public final class Field {
             return this;
         }
 
+        public Builder withIndexed(final boolean indexed) {
+            this.indexed = indexed;
+            return this;
+        }
+
         public Field build() {
             final Field field = new Field();
             field.name = name;
+            field.indexed = indexed;
             return field;
         }
     }

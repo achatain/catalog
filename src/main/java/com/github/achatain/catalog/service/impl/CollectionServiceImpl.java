@@ -21,7 +21,9 @@ package com.github.achatain.catalog.service.impl;
 
 import com.github.achatain.catalog.dao.CollectionDao;
 import com.github.achatain.catalog.dto.CollectionDto;
+import com.github.achatain.catalog.dto.FieldDto;
 import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.entity.Field;
 import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
@@ -61,7 +63,7 @@ public class CollectionServiceImpl implements CollectionService {
         final Collection collection = Collection.create()
                 .withId(findUniqueCollectionId(userId, baseCollectionId))
                 .withName(collectionDto.getName())
-                .withFields(collectionDto.getFields())
+                .withFields(collectionDto.getFields().stream().map(fieldDtoToField).collect(Collectors.toList()))
                 .build();
 
         this.collectionDao.createCollection(userId, collection);
@@ -74,7 +76,7 @@ public class CollectionServiceImpl implements CollectionService {
         final Collection collection = Collection.create()
                 .withId(collectionId)
                 .withName(collectionDto.getName())
-                .withFields(collectionDto.getFields())
+                .withFields(collectionDto.getFields().stream().map(fieldDtoToField).collect(Collectors.toList()))
                 .build();
 
         this.collectionDao.updateCollection(userId, collection);
@@ -99,9 +101,19 @@ public class CollectionServiceImpl implements CollectionService {
         }
     }
 
+    private final Function<FieldDto, Field> fieldDtoToField = fieldDto -> Field.create()
+            .withName(fieldDto.getName())
+            .withIndexed(fieldDto.isIndexed())
+            .build();
+
+    private final Function<Field, FieldDto> fieldToFieldDto = field -> FieldDto.create()
+            .withName(field.getName())
+            .withIndexed(field.getIndexed())
+            .build();
+
     private final Function<Collection, CollectionDto> colToColDto = col -> CollectionDto.create()
             .withId(col.getId())
             .withName(col.getName())
-            .withFields(col.getFields())
+            .withFields(col.getFields().stream().map(fieldToFieldDto).collect(Collectors.toList()))
             .build();
 }

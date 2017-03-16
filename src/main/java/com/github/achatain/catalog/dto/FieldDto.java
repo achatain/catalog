@@ -19,24 +19,20 @@
 
 package com.github.achatain.catalog.dto;
 
-import com.google.common.collect.Maps;
+public class FieldDto extends HateoasDto {
 
-import java.util.Map;
+    private String name;
+    private boolean indexed;
 
-public class ItemDto extends HateoasDto {
-
-    private transient String id;
-    private Map<String, Object> attributes;
-
-    private ItemDto() {
+    private FieldDto() {
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public Map<String, Object> getAttributes() {
-        return attributes;
+    public boolean isIndexed() {
+        return indexed;
     }
 
     public static Builder create() {
@@ -44,30 +40,27 @@ public class ItemDto extends HateoasDto {
     }
 
     public static class Builder {
+        private String name;
+        private boolean indexed;
 
-        private String id;
-        private final Map<String, Object> attributes = Maps.newHashMap();
+        private Builder() {
+        }
 
-        public Builder withId(final String id) {
-            this.id = id;
+        public Builder withName(final String name) {
+            this.name = name;
             return this;
         }
 
-        public Builder withAttribute(final String key, final Object value) {
-            this.attributes.put(key, value);
+        public Builder withIndexed(final boolean indexed) {
+            this.indexed = indexed;
             return this;
         }
 
-        public Builder withAttributes(final Map<String, Object> attributes) {
-            this.attributes.putAll(attributes);
-            return this;
-        }
-
-        public ItemDto build() {
-            final ItemDto itemDto = new ItemDto();
-            itemDto.id = id;
-            itemDto.attributes = attributes;
-            return itemDto;
+        public FieldDto build() {
+            final FieldDto field = new FieldDto();
+            field.name = name;
+            field.indexed = indexed;
+            return field;
         }
     }
 }

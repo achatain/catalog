@@ -35,14 +35,19 @@ import static java.lang.String.format;
 public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
 
     private static final String COL_ID_REGEX = "(.+)(/collections/)(\\w+)(/.*)?";
-    private static final Integer COL_NAME_REGEX_GROUP = 3;
+    private static final Integer COL_ID_REGEX_GROUP = 3;
 
     private static final String ITEM_ID_REGEX = "(.+)(/collections/)(\\w+)(/items/)(\\w+)(/.*)?";
-    private static final Integer ITEM_NAME_REGEX_GROUP = 5;
+    private static final Integer ITEM_ID_REGEX_GROUP = 5;
+
+    private static final String INDEX_ID_REGEX = "(.+)(/collections/)(\\w+)(/indexes/)(\\w+)(/.*)?";
+    private static final Integer INDEX_ID_REGEX_GROUP = 5;
 
     private final Pattern colIdPattern;
     private final Pattern itemIdPattern;
-    private final SessionService sessionService;
+    private final Pattern indexIdPattern;
+
+    private final transient SessionService sessionService;
 
     @Inject
     AuthenticatedJsonHttpServlet(final Gson gson, final SessionService sessionService) {
@@ -50,6 +55,7 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
         this.sessionService = sessionService;
         this.colIdPattern = Pattern.compile(COL_ID_REGEX);
         this.itemIdPattern = Pattern.compile(ITEM_ID_REGEX);
+        this.indexIdPattern = Pattern.compile(INDEX_ID_REGEX);
     }
 
     final String getUserId(final HttpServletRequest request) {
@@ -57,15 +63,21 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
     }
 
     final String extractCollectionIdFromRequest(final HttpServletRequest request) {
-        final Optional<String> optionalColId = extractFromRequest(request, colIdPattern, COL_NAME_REGEX_GROUP);
+        final Optional<String> optionalColId = extractFromRequest(request, colIdPattern, COL_ID_REGEX_GROUP);
         Preconditions.checkArgument(optionalColId.isPresent(), "No collection id was provided in the request URI");
         return optionalColId.get();
     }
 
     final String extractItemIdFromRequest(final HttpServletRequest request) {
-        final Optional<String> optionalItemId = extractFromRequest(request, itemIdPattern, ITEM_NAME_REGEX_GROUP);
+        final Optional<String> optionalItemId = extractFromRequest(request, itemIdPattern, ITEM_ID_REGEX_GROUP);
         Preconditions.checkArgument(optionalItemId.isPresent(), "No item id was provided in the request URI");
         return optionalItemId.get();
+    }
+
+    final String extractIndexIdFromRequest(final HttpServletRequest request) {
+        final Optional<String> optionalIndexId = extractFromRequest(request, indexIdPattern, INDEX_ID_REGEX_GROUP);
+        Preconditions.checkArgument(optionalIndexId.isPresent(), "No index id was provided in the request URI");
+        return optionalIndexId.get();
     }
 
     private Optional<String> extractFromRequest(final HttpServletRequest request, final Pattern pattern, final int group) {

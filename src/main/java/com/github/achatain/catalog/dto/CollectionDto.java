@@ -19,15 +19,13 @@
 
 package com.github.achatain.catalog.dto;
 
-import com.github.achatain.catalog.entity.Field;
-
 import java.util.List;
 
 public final class CollectionDto extends HateoasDto {
 
-    private String id;
+    private transient String id;
     private String name;
-    private List<Field> fields;
+    private List<FieldDto> fields;
 
     private CollectionDto() {
         super();
@@ -41,7 +39,7 @@ public final class CollectionDto extends HateoasDto {
         return name;
     }
 
-    public List<Field> getFields() {
+    public List<FieldDto> getFields() {
         return fields;
     }
 
@@ -53,7 +51,7 @@ public final class CollectionDto extends HateoasDto {
 
         private String id;
         private String name;
-        private List<Field> fields;
+        private List<FieldDto> fields;
 
         private Builder() {
         }
@@ -68,7 +66,7 @@ public final class CollectionDto extends HateoasDto {
             return this;
         }
 
-        public Builder withFields(final List<Field> fields) {
+        public Builder withFields(final List<FieldDto> fields) {
             this.fields = fields;
             return this;
         }

@@ -72,6 +72,17 @@ public class CollectionIdServlet extends AuthenticatedJsonHttpServlet {
             col.addLink(Link.create().withRel("delete").withMethod(Link.Method.DELETE).withHref(href).build());
             col.addLink(Link.create().withRel("list").withMethod(Link.Method.GET).withHref(hrefItems).build());
             col.addLink(Link.create().withRel("add").withMethod(Link.Method.POST).withHref(hrefItems).build());
+
+            final String hrefIndexes = format("%s/indexes", href);
+            col.getFields().forEach(fieldDto ->
+                fieldDto.addLink(Link.create()
+                        .withRel(fieldDto.isIndexed() ? "delete" : "add")
+                        .withMethod(fieldDto.isIndexed() ? Link.Method.DELETE : Link.Method.POST)
+                        .withHref(format("%s/%s", hrefIndexes, fieldDto.getName()))
+                        .build()
+                )
+            );
+
             sendResponse(resp, col);
         } else {
             sendNotFoundError(resp, format("No collection was found with id [%s]", colId));

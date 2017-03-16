@@ -23,6 +23,7 @@
         <version.mongodb.driver>3.4.2</version.mongodb.driver>
         <version.mockito>2.3.5</version.mockito>
         <version.apache.commons.lang3>3.5</version.apache.commons.lang3>
+        <version.wildfly.jms.client.bom>10.1.0.Final</version.wildfly.jms.client.bom>
     </properties>
 
     <prerequisites>
@@ -65,6 +66,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${version.apache.commons.lang3}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-jms-client-bom</artifactId>
+            <version>${version.wildfly.jms.client.bom}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

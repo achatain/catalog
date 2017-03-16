@@ -38,6 +38,7 @@ class CatalogServletModule extends ServletModule {
         serve("/cron").with(CronServlet.class);
 
         serveRegex(format(ItemIdServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(ItemIdServlet.class);
+        serveRegex(format(IndexIdServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(IndexIdServlet.class);
         serveRegex(format(ItemServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(ItemServlet.class);
         serveRegex(format(CollectionIdServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionIdServlet.class);
         serveRegex(format(CollectionServlet.REGEX_PATH, API_ROOT_PATH, V1)).with(CollectionServlet.class);
