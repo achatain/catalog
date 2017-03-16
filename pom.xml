@@ -30,6 +30,13 @@
         <maven>3.1.0</maven>
     </prerequisites>
 
+    <repositories>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -71,6 +78,7 @@
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-jms-client-bom</artifactId>
             <version>${version.wildfly.jms.client.bom}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
