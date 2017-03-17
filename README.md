@@ -4,11 +4,15 @@ Catalog
 
 https://github.com/achatain/catalog
 
-##What is it?
+## What is it?
 
 A catalog app to organise collections of items.
 
-##API
+## Application server configuration
+
+Recommended to use WildFly. See the [wiki](https://github.com/achatain/catalog/wiki) for server configuration details.
+
+## API
 
 ### /collections
 
@@ -29,6 +33,12 @@ A catalog app to organise collections of items.
 **GET** *list all items in the given collection*
 
 **POST** *store the provided item in the given collection*
+
+### /collections/{collection_id}/indexes
+
+**POST** *create an index on the given field from the given collection* (DEV IN PROGRESS)
+
+**DELETE** *drop the index on the given field from the given collection* (DEV IN PROGRESS)
 
 ### /collections/{collection_id}/items/{item_id}
 
