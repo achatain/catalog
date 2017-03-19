@@ -35,4 +35,8 @@ public interface CollectionDao {
     void deleteCollection(String userId, String collectionId);
 
     void updateCollection(String userId, Collection collection);
+
+    void createIndex(String userId, String collectionId, String fieldName);
+
+    void dropIndex(String userId, String collectionId, String fieldName);
 }

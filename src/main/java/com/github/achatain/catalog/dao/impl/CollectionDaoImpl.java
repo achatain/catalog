@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -82,5 +84,18 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
     @Override
     public void updateCollection(final String userId, final Collection collection) {
         getMetaCollection(userId).findOneAndReplace(idFilter.apply(collection.getId()), Document.parse(gson.toJson(collection)));
+    }
+
+    @Override
+    public void createIndex(final String userId, final String collectionId, final String fieldName) {
+        getDatabase(userId).getCollection(collectionId).createIndex(
+                Indexes.text(fieldName),
+                new IndexOptions().name(fieldName).background(true)
+        );
+    }
+
+    @Override
+    public void dropIndex(final String userId, final String collectionId, final String fieldName) {
+        getDatabase(userId).getCollection(collectionId).dropIndex(fieldName);
     }
 }

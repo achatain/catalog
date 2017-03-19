@@ -19,6 +19,7 @@
 
 package com.github.achatain.catalog.servlet;
 
+import com.github.achatain.catalog.jms.IndexMessage;
 import com.github.achatain.javawebappauthentication.service.SessionService;
 import com.google.gson.Gson;
 
@@ -62,7 +63,13 @@ public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
 
         LOG.info(format("User [%s] to add the following index [%s] in the collection [%s]", userId, indexId, colId));
 
-        jmsContext.createProducer().send(indexCreateDestination, "creation");
+        final IndexMessage indexMessage = IndexMessage.create()
+                .withUserId(userId)
+                .withColId(colId)
+                .withFieldName(indexId)
+                .build();
+
+        jmsContext.createProducer().send(indexCreateDestination, indexMessage);
     }
 
     @Override
@@ -73,6 +80,12 @@ public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
 
         LOG.info(format("User [%s] to delete the following index [%s] in the collection [%s]", userId, indexId, colId));
 
-        jmsContext.createProducer().send(indexDropDestination, "suppression");
+        final IndexMessage indexMessage = IndexMessage.create()
+                .withUserId(userId)
+                .withColId(colId)
+                .withFieldName(indexId)
+                .build();
+
+        jmsContext.createProducer().send(indexDropDestination, indexMessage);
     }
 }

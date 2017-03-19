@@ -87,6 +87,16 @@ public class CollectionServiceImpl implements CollectionService {
         collectionDao.deleteCollection(userId, collectionId);
     }
 
+    @Override
+    public void createIndex(final String userId, final String collectionId, final String fieldName) {
+        collectionDao.createIndex(userId, collectionId, fieldName);
+    }
+
+    @Override
+    public void dropIndex(final String userId, final String collectionId, final String fieldName) {
+        collectionDao.dropIndex(userId, collectionId, fieldName);
+    }
+
     private String findUniqueCollectionId(final String userId, final String baseCollectionId) {
         final Optional<Collection> optionalCollection = collectionDao.findById(userId, baseCollectionId);
 

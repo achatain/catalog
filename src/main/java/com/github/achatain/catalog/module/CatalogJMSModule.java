@@ -29,11 +29,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-/**
- * - Launch JBoss with full config: /wildfly-10.1.0.Final/bin/standalone.sh --server-config=standalone-full.xml
- * - Create a JBoss management user
- * - Create queues in config > subsystems > messaging
- */
 public class CatalogJMSModule extends AbstractModule {
 
     private static final String CONNECTION_FACTORY = "ConnectionFactory";

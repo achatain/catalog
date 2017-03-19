@@ -36,5 +36,7 @@ public interface CollectionService {
 
     void deleteCollection(String userId, String collectionId);
 
-//    void createIndex(String userId, String collectionId, String )
+    void createIndex(String userId, String collectionId, String fieldName);
+
+    void dropIndex(String userId, String collectionId, String fieldName);
 }

@@ -36,9 +36,9 @@ Recommended to use WildFly. See the [wiki](https://github.com/achatain/catalog/w
 
 ### /collections/{collection_id}/indexes
 
-**POST** *create an index on the given field from the given collection* (DEV IN PROGRESS)
+**POST** *create an index on the given field from the given collection*
 
-**DELETE** *drop the index on the given field from the given collection* (DEV IN PROGRESS)
+**DELETE** *drop the index on the given field from the given collection*
 
 ### /collections/{collection_id}/items/{item_id}
 

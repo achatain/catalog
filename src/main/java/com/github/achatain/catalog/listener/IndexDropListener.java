@@ -19,30 +19,51 @@
 
 package com.github.achatain.catalog.listener;
 
+import com.github.achatain.catalog.jms.IndexMessage;
 import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.util.Properties;
+import java.util.logging.Logger;
+
+import static java.lang.String.format;
 
 public class IndexDropListener implements MessageListener {
 
+    private static final Logger LOG = Logger.getLogger(IndexDropListener.class.getName());
+
+    private Properties properties;
     private CollectionService collectionService;
 
     @Override
     public void onMessage(final Message message) {
+        IndexMessage indexMessage = null;
+
         try {
-            final String body = message.getBody(String.class);
-            System.out.println("\tReceived body is " + body);
-            collectionService.listCollections("bla");
-        } catch (final JMSException e) {
-            e.printStackTrace();
+            indexMessage = message.getBody(IndexMessage.class);
+
+            final int deliveryCount = Integer.valueOf(message.getStringProperty("JMSXDeliveryCount"));
+            final int maxRetry = Integer.valueOf(properties.getProperty("jms.max.retry"));
+            if (deliveryCount > maxRetry) {
+                LOG.info(format("Dropping the following JMS message as max retry property [%s] has been reached: [%s]", maxRetry, indexMessage));
+                return;
+            }
+
+            collectionService.dropIndex(indexMessage.getUserId(), indexMessage.getColId(), indexMessage.getIndexId());
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to process JMS message " + indexMessage, e);
         }
     }
 
     @Inject
     private void setCollectionService(final CollectionService collectionService) {
         this.collectionService = collectionService;
+    }
+
+    @Inject
+    private void setProperties(final Properties properties) {
+        this.properties = properties;
     }
 }
