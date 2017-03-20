@@ -20,6 +20,7 @@
 package com.github.achatain.catalog.dao;
 
 import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.exception.IndexDropException;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,5 +41,5 @@ public interface CollectionDao {
 
     void createIndex(String userId, String collectionId, String fieldName);
 
-    void dropIndex(String userId, String collectionId, String fieldName);
+    void dropIndex(String userId, String collectionId, String fieldName) throws IndexDropException;
 }

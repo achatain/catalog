@@ -22,6 +22,7 @@ package com.github.achatain.catalog.dao.impl;
 import com.github.achatain.catalog.dao.CollectionDao;
 import com.github.achatain.catalog.dao.MongoDao;
 import com.github.achatain.catalog.entity.Collection;
+import com.github.achatain.catalog.exception.IndexDropException;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -39,10 +40,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.mongodb.client.model.Filters.eq;
+import static java.lang.String.format;
 
 public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     private static final String COLLECTIONS_COLLECTION_NAME = "collections_";
+    private static final String ATTRIBUTES_PREFIX = "attributes.";
 
     @Inject
     CollectionDaoImpl(final MongoClient mongoClient, final Gson gson) {
@@ -96,14 +99,17 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
     @Override
     public void createIndex(final String userId, final String collectionId, final String fieldName) {
         getDatabase(userId).getCollection(collectionId).createIndex(
-                Indexes.text(fieldName),
+                Indexes.ascending(ATTRIBUTES_PREFIX + fieldName),
                 new IndexOptions().name(fieldName).background(true)
         );
     }
 
     @Override
-    public void dropIndex(final String userId, final String collectionId, final String fieldName) {
-        // TODO throw checked exception to be potentially caught by the JMS message listener
-        getDatabase(userId).getCollection(collectionId).dropIndex(fieldName);
+    public void dropIndex(final String userId, final String collectionId, final String fieldName) throws IndexDropException {
+        try {
+            getDatabase(userId).getCollection(collectionId).dropIndex(fieldName);
+        } catch (final Exception e) {
+            throw new IndexDropException(format("Failed to drop index on field [%s] from collection [%s] for user [%s]", fieldName, collectionId, userId), e);
+        }
     }
 }

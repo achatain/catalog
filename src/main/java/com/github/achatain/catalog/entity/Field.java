@@ -22,7 +22,6 @@ package com.github.achatain.catalog.entity;
 public final class Field {
 
     private String name;
-    // TODO ensure the following field is not persisted
     private transient boolean indexed;
 
     private Field() {

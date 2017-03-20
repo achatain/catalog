@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <unit.test.threadcount>1</unit.test.threadcount>
-        <jms.max.retry>2</jms.max.retry>
+        <jms.max.retry>5</jms.max.retry>
         <version.servlet>3.1.0</version.servlet>
         <version.guice>4.1.0</version.guice>
         <version.gson>2.8.0</version.gson>

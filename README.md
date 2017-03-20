@@ -34,12 +34,6 @@ Recommended to use WildFly. See the [wiki](https://github.com/achatain/catalog/w
 
 **POST** *store the provided item in the given collection*
 
-### /collections/{collection_id}/indexes/{field_name}
-
-**POST** *create an index on the given field from the given collection*
-
-**DELETE** *drop the index on the given field from the given collection*
-
 ### /collections/{collection_id}/items/{item_id}
 
 **GET** *get an item by id from the given collection*
@@ -47,3 +41,9 @@ Recommended to use WildFly. See the [wiki](https://github.com/achatain/catalog/w
 **PUT** *edit an item by id from the given collection*
 
 **DELETE** *delete an item by id from the given collection*
+
+### /collections/{collection_id}/indexes/{field_name}
+
+**POST** *create an index on the given field from the given collection*
+
+**DELETE** *drop the index on the given field from the given collection*

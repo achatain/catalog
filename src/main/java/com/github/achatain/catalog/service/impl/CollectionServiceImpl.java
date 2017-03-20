@@ -24,11 +24,13 @@ import com.github.achatain.catalog.dto.CollectionDto;
 import com.github.achatain.catalog.dto.FieldDto;
 import com.github.achatain.catalog.entity.Collection;
 import com.github.achatain.catalog.entity.Field;
+import com.github.achatain.catalog.exception.IndexDropException;
 import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,22 +48,16 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public List<CollectionDto> listCollections(final String userId) {
-        final List<CollectionDto> collectionDtos = collectionDao.listCollections(userId).stream().map(colToColDto).collect(Collectors.toList());
-
-        // TODO maybe just return a list of collection names instead of the full dto?
-        collectionDtos
-                .forEach(colDto -> {
-                    final List<String> indexes = collectionDao.listCollectionIndexes(userId, colDto.getId());
-                    colDto.getFields().forEach(fieldDto -> fieldDto.setIndexed(indexes.contains(fieldDto.getName())));
-                });
-
-        return collectionDtos;
+        return collectionDao.listCollections(userId).stream().map(colToLiteColDto).collect(Collectors.toList());
     }
 
     @Override
     public Optional<CollectionDto> readCollection(final String userId, final String collectionId) {
-        // TODO populate fieldDtos indexed property based on collection indexes (see CollectionServiceImpl.listCollections)
-        return collectionDao.findById(userId, collectionId).map(colToColDto);
+        final Optional<CollectionDto> optionalCollectionDto = collectionDao.findById(userId, collectionId).map(colToColDto);
+
+        optionalCollectionDto.ifPresent(colDto -> populateIndexedInFields.accept(colDto, collectionDao.listCollectionIndexes(userId, collectionId)));
+
+        return optionalCollectionDto;
     }
 
     @Override
@@ -101,7 +97,7 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public void dropIndex(final String userId, final String collectionId, final String fieldName) {
+    public void dropIndex(final String userId, final String collectionId, final String fieldName) throws IndexDropException {
         collectionDao.dropIndex(userId, collectionId, fieldName);
     }
 
@@ -129,9 +125,16 @@ public class CollectionServiceImpl implements CollectionService {
             .withIndexed(field.getIndexed())
             .build();
 
+    private final Function<Collection, CollectionDto> colToLiteColDto = col -> CollectionDto.create()
+            .withId(col.getId())
+            .withName(col.getName())
+            .build();
+
     private final Function<Collection, CollectionDto> colToColDto = col -> CollectionDto.create()
             .withId(col.getId())
             .withName(col.getName())
             .withFields(col.getFields().stream().map(fieldToFieldDto).collect(Collectors.toList()))
             .build();
+
+    private final BiConsumer<CollectionDto, List<String>> populateIndexedInFields = (colDto, indexes) -> colDto.getFields().forEach(fieldDto -> fieldDto.setIndexed(indexes.contains(fieldDto.getName())));
 }

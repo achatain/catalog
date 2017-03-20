@@ -22,6 +22,7 @@ package com.github.achatain.catalog.servlet;
 import com.github.achatain.catalog.jms.IndexMessage;
 import com.github.achatain.javawebappauthentication.service.SessionService;
 import com.google.gson.Gson;
+import org.apache.commons.lang3.CharEncoding;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +33,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
@@ -39,7 +41,7 @@ import static java.lang.String.format;
 @Singleton
 public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
 
-    public static final String REGEX_PATH = "\\%s\\%s\\/collections\\/\\w+\\/indexes\\/\\w+(\\/)?";
+    public static final String REGEX_PATH = "\\%s\\%s\\/collections\\/\\w+\\/indexes\\/.+";
 
     private static final transient Logger LOG = Logger.getLogger(IndexIdServlet.class.getName());
 
@@ -59,7 +61,7 @@ public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
         final String colId = extractCollectionIdFromRequest(req);
-        final String fieldName = extractFieldNameFromRequest(req);
+        final String fieldName = URLDecoder.decode(extractFieldNameFromRequest(req), CharEncoding.UTF_8);
 
         LOG.info(format("User [%s] to add the following index [%s] in the collection [%s]", userId, fieldName, colId));
 
@@ -76,7 +78,7 @@ public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
         final String colId = extractCollectionIdFromRequest(req);
-        final String fieldName = extractFieldNameFromRequest(req);
+        final String fieldName = URLDecoder.decode(extractFieldNameFromRequest(req), CharEncoding.UTF_8);
 
         LOG.info(format("User [%s] to delete the following index [%s] in the collection [%s]", userId, fieldName, colId));
 

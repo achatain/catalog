@@ -76,7 +76,7 @@ public class CollectionIdServlet extends AuthenticatedJsonHttpServlet {
             final String hrefIndexes = format("%s/indexes", href);
             col.getFields().forEach(fieldDto ->
                 fieldDto.addLink(Link.create()
-                        .withRel(fieldDto.isIndexed() ? "delete" : "add")
+                        .withRel(fieldDto.isIndexed() ? "dropIndex" : "createIndex")
                         .withMethod(fieldDto.isIndexed() ? Link.Method.DELETE : Link.Method.POST)
                         .withHref(format("%s/%s", hrefIndexes, fieldDto.getName()))
                         .build()

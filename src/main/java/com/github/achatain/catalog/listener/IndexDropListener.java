@@ -19,13 +19,16 @@
 
 package com.github.achatain.catalog.listener;
 
+import com.github.achatain.catalog.exception.IndexDropException;
 import com.github.achatain.catalog.jms.IndexMessage;
 import com.github.achatain.catalog.service.CollectionService;
 
 import javax.inject.Inject;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
@@ -33,6 +36,9 @@ import static java.lang.String.format;
 public class IndexDropListener implements MessageListener {
 
     private static final Logger LOG = Logger.getLogger(IndexDropListener.class.getName());
+
+    private static final String JMSX_DELIVERY_COUNT = "JMSXDeliveryCount";
+    private static final String JMS_MAX_RETRY = "jms.max.retry";
 
     private Properties properties;
     private CollectionService collectionService;
@@ -44,15 +50,15 @@ public class IndexDropListener implements MessageListener {
         try {
             indexMessage = message.getBody(IndexMessage.class);
 
-            final int deliveryCount = Integer.valueOf(message.getStringProperty("JMSXDeliveryCount"));
-            final int maxRetry = Integer.valueOf(properties.getProperty("jms.max.retry"));
+            final int deliveryCount = Integer.valueOf(message.getStringProperty(JMSX_DELIVERY_COUNT));
+            final int maxRetry = Integer.valueOf(properties.getProperty(JMS_MAX_RETRY));
             if (deliveryCount > maxRetry) {
-                LOG.info(format("Dropping the following JMS message as max retry property [%s] has been reached: [%s]", maxRetry, indexMessage));
+                LOG.log(Level.WARNING, format("Dropping the following JMS message as max retry property [%s] has been reached: [%s]", maxRetry, indexMessage));
                 return;
             }
 
             collectionService.dropIndex(indexMessage.getUserId(), indexMessage.getColId(), indexMessage.getFieldName());
-        } catch (final Exception e) {
+        } catch (final JMSException | IndexDropException e) {
             throw new RuntimeException("Failed to process JMS message " + indexMessage, e);
         }
     }

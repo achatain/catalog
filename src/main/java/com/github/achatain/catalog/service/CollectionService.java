@@ -20,6 +20,7 @@
 package com.github.achatain.catalog.service;
 
 import com.github.achatain.catalog.dto.CollectionDto;
+import com.github.achatain.catalog.exception.IndexDropException;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,5 +39,5 @@ public interface CollectionService {
 
     void createIndex(String userId, String collectionId, String fieldName);
 
-    void dropIndex(String userId, String collectionId, String fieldName);
+    void dropIndex(String userId, String collectionId, String fieldName) throws IndexDropException;
 }

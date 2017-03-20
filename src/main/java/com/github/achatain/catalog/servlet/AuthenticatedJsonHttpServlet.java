@@ -40,7 +40,7 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
     private static final String ITEM_ID_REGEX = "(.+)(/collections/)(\\w+)(/items/)(\\w+)(/.*)?";
     private static final Integer ITEM_ID_REGEX_GROUP = 5;
 
-    private static final String FIELD_NAME_REGEX = "(.+)(/collections/)(\\w+)(/indexes/)(\\w+)(/.*)?";
+    private static final String FIELD_NAME_REGEX = "(.+)(/collections/)(\\w+)(/indexes/)(.+)";
     private static final Integer FIELD_NAME_REGEX_GROUP = 5;
 
     private final Pattern colIdPattern;
@@ -76,7 +76,7 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
 
     final String extractFieldNameFromRequest(final HttpServletRequest request) {
         final Optional<String> optionalFieldName = extractFromRequest(request, fieldNamePattern, FIELD_NAME_REGEX_GROUP);
-        Preconditions.checkArgument(optionalFieldName.isPresent(), "No index id was provided in the request URI");
+        Preconditions.checkArgument(optionalFieldName.isPresent(), "No field name was provided in the request URI");
         return optionalFieldName.get();
     }
 
