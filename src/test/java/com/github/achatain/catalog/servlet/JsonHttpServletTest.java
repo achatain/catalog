@@ -64,7 +64,7 @@ public class JsonHttpServletTest {
         final StringWriter stringWriter = new StringWriter();
         when(response.getWriter()).thenReturn(new PrintWriter(stringWriter));
         jsonHttpServlet.sendResponse(response, Field.create().withName("my field").build());
-        assertThat(stringWriter.toString(), equalTo("{\"name\":\"my field\",\"indexed\":false}"));
+        assertThat(stringWriter.toString(), equalTo("{\"name\":\"my field\"}"));
     }
 
     private static class TestJsonHttpServlet extends JsonHttpServlet {
