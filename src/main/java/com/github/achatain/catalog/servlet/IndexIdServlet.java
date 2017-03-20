@@ -59,14 +59,14 @@ public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
         final String colId = extractCollectionIdFromRequest(req);
-        final String indexId = extractIndexIdFromRequest(req);
+        final String fieldName = extractFieldNameFromRequest(req);
 
-        LOG.info(format("User [%s] to add the following index [%s] in the collection [%s]", userId, indexId, colId));
+        LOG.info(format("User [%s] to add the following index [%s] in the collection [%s]", userId, fieldName, colId));
 
         final IndexMessage indexMessage = IndexMessage.create()
                 .withUserId(userId)
                 .withColId(colId)
-                .withFieldName(indexId)
+                .withFieldName(fieldName)
                 .build();
 
         jmsContext.createProducer().send(indexCreateDestination, indexMessage);
@@ -76,14 +76,14 @@ public class IndexIdServlet extends AuthenticatedJsonHttpServlet {
     protected void doDelete(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String userId = getUserId(req);
         final String colId = extractCollectionIdFromRequest(req);
-        final String indexId = extractIndexIdFromRequest(req);
+        final String fieldName = extractFieldNameFromRequest(req);
 
-        LOG.info(format("User [%s] to delete the following index [%s] in the collection [%s]", userId, indexId, colId));
+        LOG.info(format("User [%s] to delete the following index [%s] in the collection [%s]", userId, fieldName, colId));
 
         final IndexMessage indexMessage = IndexMessage.create()
                 .withUserId(userId)
                 .withColId(colId)
-                .withFieldName(indexId)
+                .withFieldName(fieldName)
                 .build();
 
         jmsContext.createProducer().send(indexDropDestination, indexMessage);

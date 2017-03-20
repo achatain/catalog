@@ -35,6 +35,10 @@ public class FieldDto extends HateoasDto {
         return indexed;
     }
 
+    public void setIndexed(final boolean indexed) {
+        this.indexed = indexed;
+    }
+
     public static Builder create() {
         return new Builder();
     }

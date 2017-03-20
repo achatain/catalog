@@ -40,12 +40,12 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
     private static final String ITEM_ID_REGEX = "(.+)(/collections/)(\\w+)(/items/)(\\w+)(/.*)?";
     private static final Integer ITEM_ID_REGEX_GROUP = 5;
 
-    private static final String INDEX_ID_REGEX = "(.+)(/collections/)(\\w+)(/indexes/)(\\w+)(/.*)?";
-    private static final Integer INDEX_ID_REGEX_GROUP = 5;
+    private static final String FIELD_NAME_REGEX = "(.+)(/collections/)(\\w+)(/indexes/)(\\w+)(/.*)?";
+    private static final Integer FIELD_NAME_REGEX_GROUP = 5;
 
     private final Pattern colIdPattern;
     private final Pattern itemIdPattern;
-    private final Pattern indexIdPattern;
+    private final Pattern fieldNamePattern;
 
     private final transient SessionService sessionService;
 
@@ -55,7 +55,7 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
         this.sessionService = sessionService;
         this.colIdPattern = Pattern.compile(COL_ID_REGEX);
         this.itemIdPattern = Pattern.compile(ITEM_ID_REGEX);
-        this.indexIdPattern = Pattern.compile(INDEX_ID_REGEX);
+        this.fieldNamePattern = Pattern.compile(FIELD_NAME_REGEX);
     }
 
     final String getUserId(final HttpServletRequest request) {
@@ -74,10 +74,10 @@ public abstract class AuthenticatedJsonHttpServlet extends JsonHttpServlet {
         return optionalItemId.get();
     }
 
-    final String extractIndexIdFromRequest(final HttpServletRequest request) {
-        final Optional<String> optionalIndexId = extractFromRequest(request, indexIdPattern, INDEX_ID_REGEX_GROUP);
-        Preconditions.checkArgument(optionalIndexId.isPresent(), "No index id was provided in the request URI");
-        return optionalIndexId.get();
+    final String extractFieldNameFromRequest(final HttpServletRequest request) {
+        final Optional<String> optionalFieldName = extractFromRequest(request, fieldNamePattern, FIELD_NAME_REGEX_GROUP);
+        Preconditions.checkArgument(optionalFieldName.isPresent(), "No index id was provided in the request URI");
+        return optionalFieldName.get();
     }
 
     private Optional<String> extractFromRequest(final HttpServletRequest request, final Pattern pattern, final int group) {

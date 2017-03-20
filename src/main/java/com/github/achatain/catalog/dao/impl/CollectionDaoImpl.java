@@ -65,6 +65,13 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
     }
 
     @Override
+    public List<String> listCollectionIndexes(final String userId, final String collectionId) {
+        return getDatabase(userId).getCollection(collectionId).listIndexes()
+                .map(document -> document.getString("name"))
+                .into(new ArrayList<>());
+    }
+
+    @Override
     public Optional<Collection> findById(String userId, String collectionId) {
         final Optional<Document> foundDocument = Optional.ofNullable(getMetaCollection(userId).find(idFilter.apply(collectionId)).first());
         return foundDocument.map(doc -> Optional.of(gson.fromJson(doc.toJson(), Collection.class))).orElseGet(Optional::empty);
@@ -96,6 +103,7 @@ public class CollectionDaoImpl extends MongoDao implements CollectionDao {
 
     @Override
     public void dropIndex(final String userId, final String collectionId, final String fieldName) {
+        // TODO throw checked exception to be potentially caught by the JMS message listener
         getDatabase(userId).getCollection(collectionId).dropIndex(fieldName);
     }
 }

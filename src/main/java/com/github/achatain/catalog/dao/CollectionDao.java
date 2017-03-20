@@ -28,6 +28,8 @@ public interface CollectionDao {
 
     List<Collection> listCollections(String userId);
 
+    List<String> listCollectionIndexes(String userId, String collectionId);
+
     Optional<Collection> findById(String userId, String collectionId);
 
     void createCollection(String userId, Collection collection);

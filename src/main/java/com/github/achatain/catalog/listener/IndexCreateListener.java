@@ -25,11 +25,9 @@ import com.github.achatain.catalog.service.CollectionService;
 import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.util.Properties;
 
 public class IndexCreateListener implements MessageListener {
 
-    private Properties properties;
     private CollectionService collectionService;
 
     @Override
@@ -38,7 +36,7 @@ public class IndexCreateListener implements MessageListener {
 
         try {
             indexMessage = message.getBody(IndexMessage.class);
-            collectionService.createIndex(indexMessage.getUserId(), indexMessage.getColId(), indexMessage.getIndexId());
+            collectionService.createIndex(indexMessage.getUserId(), indexMessage.getColId(), indexMessage.getFieldName());
         } catch (final Exception e) {
             throw new RuntimeException("Failed to process JMS message " + indexMessage, e);
         }
@@ -47,10 +45,5 @@ public class IndexCreateListener implements MessageListener {
     @Inject
     private void setCollectionService(final CollectionService collectionService) {
         this.collectionService = collectionService;
-    }
-
-    @Inject
-    private void setProperties(final Properties properties) {
-        this.properties = properties;
     }
 }

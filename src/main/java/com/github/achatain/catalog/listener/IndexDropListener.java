@@ -51,7 +51,7 @@ public class IndexDropListener implements MessageListener {
                 return;
             }
 
-            collectionService.dropIndex(indexMessage.getUserId(), indexMessage.getColId(), indexMessage.getIndexId());
+            collectionService.dropIndex(indexMessage.getUserId(), indexMessage.getColId(), indexMessage.getFieldName());
         } catch (final Exception e) {
             throw new RuntimeException("Failed to process JMS message " + indexMessage, e);
         }

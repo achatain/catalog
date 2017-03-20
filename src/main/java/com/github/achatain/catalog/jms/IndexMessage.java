@@ -25,7 +25,7 @@ public class IndexMessage implements Serializable {
 
     private String userId;
     private String colId;
-    private String indexId;
+    private String fieldName;
 
     private IndexMessage() {
     }
@@ -38,13 +38,13 @@ public class IndexMessage implements Serializable {
         return colId;
     }
 
-    public String getIndexId() {
-        return indexId;
+    public String getFieldName() {
+        return fieldName;
     }
 
     @Override
     public String toString() {
-        return "IndexMessage{" + "userId='" + userId + '\'' + ", colId='" + colId + '\'' + ", indexId='" + indexId + '\'' + '}';
+        return "IndexMessage{" + "userId='" + userId + '\'' + ", colId='" + colId + '\'' + ", fieldName='" + fieldName + '\'' + '}';
     }
 
     public static Builder create() {
@@ -79,7 +79,7 @@ public class IndexMessage implements Serializable {
             final IndexMessage indexMessage = new IndexMessage();
             indexMessage.userId = userId;
             indexMessage.colId = colId;
-            indexMessage.indexId = fieldName;
+            indexMessage.fieldName = fieldName;
             return indexMessage;
         }
     }

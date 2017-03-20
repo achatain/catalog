@@ -46,13 +46,21 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public List<CollectionDto> listCollections(final String userId) {
-        final List<Collection> collections = collectionDao.listCollections(userId);
+        final List<CollectionDto> collectionDtos = collectionDao.listCollections(userId).stream().map(colToColDto).collect(Collectors.toList());
 
-        return collections.stream().map(colToColDto).collect(Collectors.toList());
+        // TODO maybe just return a list of collection names instead of the full dto?
+        collectionDtos
+                .forEach(colDto -> {
+                    final List<String> indexes = collectionDao.listCollectionIndexes(userId, colDto.getId());
+                    colDto.getFields().forEach(fieldDto -> fieldDto.setIndexed(indexes.contains(fieldDto.getName())));
+                });
+
+        return collectionDtos;
     }
 
     @Override
     public Optional<CollectionDto> readCollection(final String userId, final String collectionId) {
+        // TODO populate fieldDtos indexed property based on collection indexes (see CollectionServiceImpl.listCollections)
         return collectionDao.findById(userId, collectionId).map(colToColDto);
     }
 
