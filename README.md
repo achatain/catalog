@@ -34,7 +34,7 @@ Recommended to use WildFly. See the [wiki](https://github.com/achatain/catalog/w
 
 **POST** *store the provided item in the given collection*
 
-### /collections/{collection_id}/indexes
+### /collections/{collection_id}/indexes/{field_name}
 
 **POST** *create an index on the given field from the given collection*
 
