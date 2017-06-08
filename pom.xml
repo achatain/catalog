@@ -89,7 +89,7 @@
     </dependencies>
 
     <build>
-        <finalName>catalog</finalName>
+        <finalName>ROOT</finalName>
 
         <resources>
             <resource>
@@ -141,14 +141,14 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
+                <loginUrlRedirect>http://localhost:8080/google-sign-in/</loginUrlRedirect>
                 <mongodb.url>mongodb://localhost</mongodb.url>
             </properties>
         </profile>
         <profile>
             <id>atlas</id>
             <properties>
-                <loginUrlRedirect>http://localhost:8080/catalog/google-sign-in/</loginUrlRedirect>
+                <loginUrlRedirect>http://localhost:8080/google-sign-in/</loginUrlRedirect>
                 <mongodb.url>${env.ATLAS_MONGODB_DB_URL}</mongodb.url>
             </properties>
         </profile>

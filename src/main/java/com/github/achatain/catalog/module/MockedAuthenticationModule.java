@@ -79,7 +79,7 @@ public class MockedAuthenticationModule extends AbstractModule {
         public Optional<AuthenticatedUser> getUserFromSession(final HttpSession session) {
             return Optional.of(
                     AuthenticatedUser.create()
-                            .withId("goog-1234")
+                            .withId("goog-118064819047911511899")
                             .withName("Mocky")
                             .withEmail("mocked.user@gmail.com")
                             .withFamilyName("Mc Mock Face")

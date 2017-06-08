@@ -45,7 +45,10 @@ public class CatalogFilterModule extends ServletModule {
         Map<String, String> initParams = new HashMap<>();
         initParams.put(SessionFilter.LOGIN_URL_REDIRECT, properties.getProperty(SessionFilter.LOGIN_URL_REDIRECT));
 
-        filter("/needs-session/*").through(SessionFilter.class, initParams);
+        // TODO might not need the regex filtering below, as long as API calls are filtered through the SessionFilter
+        // TODO the frontend should advise user to sign-in if they are not signed-in already
+        // TODO need a User endpoint to let the frontend know if someone's logged in
+        filterRegex("^(?!(/google-sign-in|/google-auth|/static|/favicon.ico|/)).*$").through(SessionFilter.class, initParams);
         filter(API_ROOT_PATH + V1 + "/*").through(SessionFilter.class, initParams);
         filter(API_ROOT_PATH + V1 + "/*").through(JsonResponseFilter.class);
         filter(API_ROOT_PATH + V1 + "/*").through(UserFilter.class);
