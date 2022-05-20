@@ -13,7 +13,7 @@
         <jms.max.retry>5</jms.max.retry>
         <version.servlet>3.1.0</version.servlet>
         <version.guice>4.1.0</version.guice>
-        <version.gson>2.8.0</version.gson>
+        <version.gson>2.8.9</version.gson>
         <version.junit>4.13.1</version.junit>
         <version.war.plugin>3.0.0</version.war.plugin>
         <version.codehaus.mojo>2.3</version.codehaus.mojo>
